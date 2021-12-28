@@ -1,5 +1,6 @@
 package ir.maktab.hsps.service;
 
+import ir.maktab.hsps.exception.ResourceNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,13 +15,20 @@ public abstract class BaseService<T, ID> {
         this.jpaRepository = jpaRepository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public T saveOrUpdate(T entity) {
+    @Transactional
+    public T save(T entity) {
+        return jpaRepository.save(entity);
+    }
+
+    @Transactional
+    public T update(T entity) {
         return jpaRepository.save(entity);
     }
 
     public T loadById(ID id) {
-        return jpaRepository.getById(id);
+        return jpaRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Entity", "ID", id)
+                );
     }
 
     public List<T> loadAll() {

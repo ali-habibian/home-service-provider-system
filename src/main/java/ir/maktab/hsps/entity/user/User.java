@@ -18,6 +18,10 @@ public class User {
     private String firstName;
 
     private String lastName;
+
+    @Column(unique = true, nullable = false)
     private String email; // Must be unique
+
+    @Column(nullable = false)
     private String password; // Minimum size:8, combination of letters and numbers
 }

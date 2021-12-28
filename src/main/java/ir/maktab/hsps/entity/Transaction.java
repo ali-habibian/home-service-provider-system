@@ -29,4 +29,6 @@ public class Transaction {
 
     @OneToOne(cascade = CascadeType.ALL)
     private HomeServiceOffer homeServiceOffer;
+
+    private Double amount;
 }
