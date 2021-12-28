@@ -29,7 +29,7 @@ public class AdminService extends BaseService<Admin, Long> {
             throw new EmailException("Another admin with this email already exists");
         }
 
-        if (!passwordIsValid(admin.getPassword())) {
+        if (passwordIsNotValid(admin.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
         return super.save(admin);
@@ -42,7 +42,7 @@ public class AdminService extends BaseService<Admin, Long> {
             throw new EmailException("Another admin with this email already exists");
         }
 
-        if (!passwordIsValid(admin.getPassword())) {
+        if (passwordIsNotValid(admin.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
         return super.update(admin);
@@ -52,14 +52,14 @@ public class AdminService extends BaseService<Admin, Long> {
         return adminRepository.findByEmail(email);
     }
 
-    private boolean passwordIsValid(String password) {
+    private boolean passwordIsNotValid(String password) {
         if (password == null) {
-            return false;
+            return true;
         }
 
         String regex = "^(?=.*[0-9])(?=.*[a-z,A-Z]).{8,20}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(password);
-        return matcher.matches();
+        return !matcher.matches();
     }
 }
