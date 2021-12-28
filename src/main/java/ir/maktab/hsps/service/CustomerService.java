@@ -5,12 +5,15 @@ import ir.maktab.hsps.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class CustomerService extends BaseService<Customer, Long> {
     private final CustomerRepository customerRepository;
 
-    public Customer saveCustomer(Customer customer){ // Password validations in ui will be implemented
-        return customerRepository.save(customer);
+    @PostConstruct
+    public void init() {
+        setJpaRepository(customerRepository);
     }
 }
