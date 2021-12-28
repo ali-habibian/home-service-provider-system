@@ -2,6 +2,7 @@ package ir.maktab.hsps.entity.user;
 
 import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.Review;
+import ir.maktab.hsps.entity.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,4 +36,7 @@ public class Proficient extends User {
 
     @OneToMany(mappedBy = "proficient")
     private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "proficient")
+    private Set<Transaction> transactions;
 }

@@ -1,6 +1,7 @@
 package ir.maktab.hsps.entity.user;
 
 import ir.maktab.hsps.entity.Address;
+import ir.maktab.hsps.entity.Transaction;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.Review;
 import lombok.AllArgsConstructor;
@@ -37,4 +38,7 @@ public class Customer extends User {
 
     @OneToMany(mappedBy = "customer")
     private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<Transaction> transactions;
 }
