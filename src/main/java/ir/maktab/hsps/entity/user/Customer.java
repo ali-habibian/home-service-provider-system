@@ -9,10 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.Set;
 
@@ -21,24 +18,22 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 public class Customer extends User {
-    @Column(name = "customer_status")
     private UserStatus customerStatus;
 
-    @Column(name = "register_date")
     @CreationTimestamp
     private Instant registerDate;
 
     private Double credit;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<HomeServiceOrder> homeServiceOrders;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Review> reviews;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Transaction> transactions;
 }

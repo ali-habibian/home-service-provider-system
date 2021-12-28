@@ -13,7 +13,7 @@ public class HomeServiceOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Proficient proficient;
 
     @CreationTimestamp
@@ -25,7 +25,7 @@ public class HomeServiceOffer {
 
     private String startTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private HomeServiceOrder homeServiceOrder;
 
     private Boolean isAccepted;

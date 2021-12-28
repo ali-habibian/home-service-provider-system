@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -31,12 +32,12 @@ public class Proficient extends User {
 
     private String profileImgUrl; // Max size: 300 KB
 
-    @OneToMany(mappedBy = "proficient")
+    @OneToMany(mappedBy = "proficient", cascade = CascadeType.ALL)
     private Set<HomeServiceOffer> homeServiceOffers;
 
-    @OneToMany(mappedBy = "proficient")
+    @OneToMany(mappedBy = "proficient", cascade = CascadeType.ALL)
     private Set<Review> reviews;
 
-    @OneToMany(mappedBy = "proficient")
+    @OneToMany(mappedBy = "proficient", cascade = CascadeType.ALL)
     private Set<Transaction> transactions;
 }

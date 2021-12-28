@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.Set;
@@ -14,6 +15,6 @@ import java.util.Set;
 @Entity
 public class MainCategory extends Category{
 
-    @OneToMany(mappedBy = "mainCategory")
+    @OneToMany(mappedBy = "mainCategory", cascade = CascadeType.ALL)
     private Set<SubCategory> subCategorySet;
 }

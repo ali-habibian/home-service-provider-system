@@ -16,10 +16,10 @@ public class HomeServiceOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private SubCategory subCategory;
 
     private Double suggestedPrice;
@@ -30,14 +30,14 @@ public class HomeServiceOrder {
 
     private Instant orderFinishedDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Address address;
 
     private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "homeServiceOrder")
+    @OneToMany(mappedBy = "homeServiceOrder", cascade = CascadeType.ALL)
     private Set<HomeServiceOffer> homeServiceOffers;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private HomeServiceOffer acceptedOffer;
 }

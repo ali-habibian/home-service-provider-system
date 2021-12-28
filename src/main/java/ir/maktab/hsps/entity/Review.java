@@ -2,10 +2,16 @@ package ir.maktab.hsps.entity;
 
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.Proficient;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Review {
     @Id
@@ -16,12 +22,12 @@ public class Review {
     private Integer rating;
     private Instant reviewTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Proficient proficient;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private HomeServiceOffer homeServiceOffer;
 }
