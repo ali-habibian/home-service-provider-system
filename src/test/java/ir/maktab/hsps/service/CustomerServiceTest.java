@@ -3,11 +3,12 @@ package ir.maktab.hsps.service;
 import ir.maktab.hsps.entity.Address;
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.UserStatus;
+import ir.maktab.hsps.exception.CreditException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CustomerServiceTest {
@@ -35,6 +36,23 @@ class CustomerServiceTest {
 
         Customer result = customerService.save(customer);
         assertNotNull(result);
+    }
+
+    @Test
+    void test_increase_credit() {
+        Customer customer = customerService.increaseCredit(1L, 5000.0);
+        assertEquals(15000.0, customer.getCredit());
+    }
+
+    @Test
+    void test_decrease_credit_isOk() {
+        Customer customer = customerService.decreaseCredit(1L, 5000.0);
+        assertEquals(10000.0, customer.getCredit());
+    }
+
+    @Test
+    void test_decrease_credit_credit_not_enough() {
+        assertThrows(CreditException.class, () -> customerService.decreaseCredit(1L, 15000.0));
     }
 
 }

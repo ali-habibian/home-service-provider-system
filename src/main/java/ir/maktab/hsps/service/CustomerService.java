@@ -1,6 +1,8 @@
 package ir.maktab.hsps.service;
 
 import ir.maktab.hsps.entity.user.Customer;
+import ir.maktab.hsps.entity.user.UserStatus;
+import ir.maktab.hsps.exception.CreditException;
 import ir.maktab.hsps.exception.EmailException;
 import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.CustomerRepository;
@@ -32,6 +34,7 @@ public class CustomerService extends BaseService<Customer, Long> {
         if (passwordIsNotValid(customer.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
+        customer.setCustomerStatus(UserStatus.NEW);
         return super.save(customer);
     }
 
@@ -45,6 +48,25 @@ public class CustomerService extends BaseService<Customer, Long> {
         if (passwordIsNotValid(customer.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
+        customer.setCustomerStatus(UserStatus.AWAITING_APPROVAL);
+        return super.update(customer);
+    }
+
+    public Customer increaseCredit(Long id, Double amount) {
+        Customer customer = loadById(id);
+        double newCredit = customer.getCredit() + amount;
+        customer.setCredit(newCredit);
+        return super.update(customer);
+    }
+
+    public Customer decreaseCredit(Long id, Double amount) {
+        Customer customer = loadById(id);
+        double credit = customer.getCredit();
+        if (credit < amount) {
+            throw new CreditException("Credit is not enough");
+        }
+        double newCredit = credit - amount;
+        customer.setCredit(newCredit);
         return super.update(customer);
     }
 

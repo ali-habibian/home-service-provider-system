@@ -28,7 +28,7 @@ public class Proficient extends User {
     @CreationTimestamp
     private Instant registerDate;
 
-    private Double credit;
+    private Double credit = 0.0;
 
     private String profileImgUrl; // Max size: 300 KB
 

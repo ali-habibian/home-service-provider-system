@@ -23,7 +23,7 @@ public class Customer extends User {
     @CreationTimestamp
     private Instant registerDate;
 
-    private Double credit;
+    private Double credit = 0.0;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;

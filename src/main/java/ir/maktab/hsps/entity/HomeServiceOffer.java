@@ -23,7 +23,7 @@ public class HomeServiceOffer {
 
     private String workDuration;
 
-    private String startTime;
+    private Instant startTime;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private HomeServiceOrder homeServiceOrder;
