@@ -21,4 +21,12 @@ class MainCategoryServiceTest {
         MainCategory result = mainCategoryService.save(mainCategory);
         assertNotNull(result);
     }
+
+    @Test
+    void load_by_id(){
+        long id = 1;
+        MainCategory mainCategory = mainCategoryService.loadById(id);
+        mainCategory.getSubCategorySet().forEach(System.out::println);
+        assertNotNull(mainCategory);
+    }
 }

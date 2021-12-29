@@ -1,20 +1,19 @@
 package ir.maktab.hsps.entity.category;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Set;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Entity
-public class MainCategory extends Category{
+public class MainCategory extends Category {
 
-    @OneToMany(mappedBy = "mainCategory", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "mainCategory")
     private Set<SubCategory> subCategorySet;
 }

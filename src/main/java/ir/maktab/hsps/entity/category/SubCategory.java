@@ -1,9 +1,9 @@
 package ir.maktab.hsps.entity.category;
 
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,13 +11,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.Set;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class SubCategory extends Category{
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private MainCategory mainCategory;
 
     @OneToMany(mappedBy = "subCategory", cascade = CascadeType.ALL)

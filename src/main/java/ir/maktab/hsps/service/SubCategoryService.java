@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,5 +16,9 @@ public class SubCategoryService extends BaseService<SubCategory, Long> {
     @PostConstruct
     public void init() {
         setJpaRepository(subCategoryRepository);
+    }
+
+    public List<SubCategory> loadByMainCategoryId(long mainCatId) {
+        return subCategoryRepository.findByMainCategoryId(mainCatId);
     }
 }
