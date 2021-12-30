@@ -22,12 +22,12 @@ public class Review {
     private Integer rating;
     private Instant reviewTime;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Proficient proficient;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private HomeServiceOffer homeServiceOffer;
 }

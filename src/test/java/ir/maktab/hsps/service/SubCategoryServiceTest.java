@@ -21,10 +21,10 @@ class SubCategoryServiceTest {
 
     @Test
     void test_save() {
-        MainCategory mainCategory = mainCategoryService.loadById(1L);
+        MainCategory mainCategory = mainCategoryService.loadById(2L);
         System.out.println(mainCategory.getName());
         SubCategory subCategory = new SubCategory();
-        subCategory.setName("Sub-Cat-4");
+        subCategory.setName("Sub-Cat-5");
         subCategory.setMainCategory(mainCategory);
 
         SubCategory result = subCategoryService.save(subCategory);

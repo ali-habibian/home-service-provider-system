@@ -4,22 +4,25 @@ import ir.maktab.hsps.entity.Address;
 import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.category.SubCategory;
 import ir.maktab.hsps.entity.user.Customer;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 public class HomeServiceOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private SubCategory subCategory;
 
     private Double suggestedPrice;
@@ -30,10 +33,10 @@ public class HomeServiceOrder {
 
     private Instant orderFinishedDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Address address;
 
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.WAITING_FOR_PROFICIENT_SUGGESTION;
 
     @OneToMany(mappedBy = "homeServiceOrder", cascade = CascadeType.ALL)
     private Set<HomeServiceOffer> homeServiceOffers;

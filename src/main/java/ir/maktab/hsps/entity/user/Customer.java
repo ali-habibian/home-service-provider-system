@@ -18,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 public class Customer extends User {
-    private UserStatus customerStatus;
+    private UserStatus customerStatus = UserStatus.NEW;
 
     @CreationTimestamp
     private Instant registerDate;

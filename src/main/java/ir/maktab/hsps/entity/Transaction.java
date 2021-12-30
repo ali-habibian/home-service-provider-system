@@ -18,16 +18,16 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Proficient proficient;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private HomeServiceOrder homeServiceOrder;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private HomeServiceOffer homeServiceOffer;
 
     private Double amount;

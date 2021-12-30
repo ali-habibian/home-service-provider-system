@@ -18,24 +18,30 @@ class CustomerServiceTest {
     @Test
     void test_save_customer_isOk() {
         Address address = Address.builder()
-                .province("Province-5")
-                .city("City-5")
-                .street("Street-5")
-                .alley("Alley-5")
-                .plaque("5")
+                .province("Province-6")
+                .city("City-6")
+                .street("Street-6")
+                .alley("Alley-6")
+                .plaque("6")
                 .build();
 
         Customer customer = new Customer();
-        customer.setFirstName("First-Customer-1");
-        customer.setLastName("Last-Customer-1");
-        customer.setEmail("Email-Customer-1@mail.com");
+        customer.setFirstName("First-Customer-2");
+        customer.setLastName("Last-Customer-2");
+        customer.setEmail("Email-Customer-2@mail.com");
         customer.setPassword("12345678asd");
-        customer.setCustomerStatus(UserStatus.NEW);
+//        customer.setCustomerStatus(UserStatus.NEW);
         customer.setCredit(10000d);
         customer.setAddress(address);
 
         Customer result = customerService.save(customer);
         assertNotNull(result);
+    }
+
+    @Test
+    void test_load_by_id(){
+        Customer customer = customerService.loadById(1L);
+        System.out.println("customer.getAddress().getStreet() = " + customer.getAddress().getStreet());
     }
 
     @Test
