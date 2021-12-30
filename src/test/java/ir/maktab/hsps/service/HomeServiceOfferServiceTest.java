@@ -3,6 +3,7 @@ package ir.maktab.hsps.service;
 import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.user.Proficient;
+import ir.maktab.hsps.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,5 +35,19 @@ class HomeServiceOfferServiceTest {
 
         HomeServiceOffer result = homeServiceOfferService.save(homeServiceOffer);
         assertNotNull(result);
+    }
+
+    @Test
+    void test_update() {
+        HomeServiceOffer homeServiceOffer = homeServiceOfferService.loadById(1L);
+        homeServiceOffer.setSuggestedPrice(21000.0);
+        HomeServiceOffer result = homeServiceOfferService.update(homeServiceOffer);
+        assertEquals(21000.0, result.getSuggestedPrice());
+    }
+
+    @Test
+    void test_delete() {
+        homeServiceOfferService.deleteById(1L);
+        assertThrows(ResourceNotFoundException.class, () -> homeServiceOfferService.loadById(1L));
     }
 }

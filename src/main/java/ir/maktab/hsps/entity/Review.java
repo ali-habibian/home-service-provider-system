@@ -2,16 +2,16 @@ package ir.maktab.hsps.entity;
 
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.Proficient;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Objects;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Review {
     @Id
@@ -20,6 +20,8 @@ public class Review {
 
     private String comment;
     private Integer rating;
+
+    @CreationTimestamp
     private Instant reviewTime;
 
     @ManyToOne
