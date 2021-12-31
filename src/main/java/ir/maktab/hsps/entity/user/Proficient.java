@@ -3,16 +3,14 @@ package ir.maktab.hsps.entity.user;
 import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.Review;
 import ir.maktab.hsps.entity.Transaction;
+import ir.maktab.hsps.entity.category.SubCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.Set;
 
@@ -40,4 +38,7 @@ public class Proficient extends User {
 
     @OneToMany(mappedBy = "proficient", cascade = CascadeType.ALL)
     private Set<Transaction> transactions;
+
+    @ManyToMany
+    private Set<SubCategory> subCategories;
 }

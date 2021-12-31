@@ -24,7 +24,7 @@ class SubCategoryServiceTest {
         MainCategory mainCategory = mainCategoryService.loadById(2L);
         System.out.println(mainCategory.getName());
         SubCategory subCategory = new SubCategory();
-        subCategory.setName("Sub-Cat-5");
+        subCategory.setName("Sub-Cat-6");
         subCategory.setMainCategory(mainCategory);
 
         SubCategory result = subCategoryService.save(subCategory);
