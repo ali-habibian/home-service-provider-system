@@ -76,6 +76,26 @@ class AdminServiceTest {
     }
 
     @Test
+    void test_change_password() {
+        Admin admin = adminService.changePassword(1, "123asd45", "456asd78");
+        assertEquals("456asd78", admin.getPassword());
+    }
+
+    @Test
+    void test_change_password_with_wrong_old_pass() {
+        assertThrows(PasswordException.class, () ->
+                adminService.changePassword(1, "123asd45", "456asd78")
+        );
+    }
+
+    @Test
+    void test_change_password_with_invalid_new_pass() {
+        assertThrows(PasswordException.class, () ->
+                adminService.changePassword(1, "456asd78", "123")
+        );
+    }
+
+    @Test
     void test_load_by_email() {
         String email = "Email-1@mail.com";
         Admin result = adminService.loadByEmail(email);
@@ -131,7 +151,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void test_delete(){
+    void test_delete() {
         long id = 5;
         adminService.deleteById(id);
 
@@ -140,7 +160,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void test_delete_not_exist(){
+    void test_delete_not_exist() {
         long id = 3;
         assertThrows(EmptyResultDataAccessException.class, () -> adminService.deleteById(id));
     }

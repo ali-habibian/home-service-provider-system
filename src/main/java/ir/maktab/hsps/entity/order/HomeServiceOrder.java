@@ -38,7 +38,7 @@ public class HomeServiceOrder {
 
     private OrderStatus orderStatus = OrderStatus.WAITING_FOR_PROFICIENT_SUGGESTION;
 
-    @OneToMany(mappedBy = "homeServiceOrder", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "homeServiceOrder", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private Set<HomeServiceOffer> homeServiceOffers;
 
     @OneToOne(cascade = CascadeType.ALL)

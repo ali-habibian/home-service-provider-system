@@ -1,9 +1,11 @@
 package ir.maktab.hsps.service;
 
 import ir.maktab.hsps.entity.Address;
+import ir.maktab.hsps.entity.user.Admin;
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.exception.CreditException;
+import ir.maktab.hsps.exception.PasswordException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +38,26 @@ class CustomerServiceTest {
 
         Customer result = customerService.save(customer);
         assertNotNull(result);
+    }
+
+    @Test
+    void test_change_password() {
+        Customer customer = customerService.changePassword(1, "12345678asd", "456asd78");
+        assertEquals("456asd78", customer.getPassword());
+    }
+
+    @Test
+    void test_change_password_with_wrong_old_pass() {
+        assertThrows(PasswordException.class, () ->
+                customerService.changePassword(1, "123asd45", "456asd78")
+        );
+    }
+
+    @Test
+    void test_change_password_with_invalid_new_pass() {
+        assertThrows(PasswordException.class, () ->
+                customerService.changePassword(1, "456asd78", "123")
+        );
     }
 
     @Test

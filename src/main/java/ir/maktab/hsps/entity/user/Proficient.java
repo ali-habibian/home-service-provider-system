@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.time.Instant;
 import java.util.Set;
 
@@ -28,6 +29,8 @@ public class Proficient extends User {
 
     private Double credit = 0.0;
 
+//    @Lob
+//    private Blob profileImg;
     private String profileImgUrl; // Max size: 300 KB
 
     @OneToMany(mappedBy = "proficient", cascade = CascadeType.ALL)

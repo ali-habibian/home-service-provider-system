@@ -1,5 +1,6 @@
 package ir.maktab.hsps.service;
 
+import ir.maktab.hsps.entity.user.Admin;
 import ir.maktab.hsps.entity.user.Proficient;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.exception.CreditException;
@@ -8,6 +9,7 @@ import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.ProficientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
@@ -52,6 +54,20 @@ public class ProficientService extends BaseService<Proficient, Long> {
         return super.update(proficient);
     }
 
+    @Transactional
+    public Proficient changePassword(long proficientId, String oldPass, String newPass) {
+        Proficient proficient = proficientRepository.getById(proficientId);
+        if (!Objects.equals(proficient.getPassword(), oldPass)) {
+            throw new PasswordException("Old password doesn't match");
+        }
+        if (passwordIsNotValid(newPass)) {
+            throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
+        }
+        proficient.setPassword(newPass);
+        return super.update(proficient);
+    }
+
+    @Transactional
     public Proficient increaseCredit(Long id, Double amount) {
         Proficient proficient = loadById(id);
         double newCredit = proficient.getCredit() + amount;

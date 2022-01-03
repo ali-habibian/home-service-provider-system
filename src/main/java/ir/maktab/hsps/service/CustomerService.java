@@ -1,5 +1,6 @@
 package ir.maktab.hsps.service;
 
+import ir.maktab.hsps.entity.user.Admin;
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.exception.CreditException;
@@ -8,6 +9,7 @@ import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
@@ -52,6 +54,20 @@ public class CustomerService extends BaseService<Customer, Long> {
         return super.update(customer);
     }
 
+    @Transactional
+    public Customer changePassword(long customerId, String oldPass, String newPass) {
+        Customer customer = customerRepository.getById(customerId);
+        if (!Objects.equals(customer.getPassword(), oldPass)) {
+            throw new PasswordException("Old password doesn't match");
+        }
+        if (passwordIsNotValid(newPass)) {
+            throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
+        }
+        customer.setPassword(newPass);
+        return super.update(customer);
+    }
+
+    @Transactional
     public Customer increaseCredit(Long id, Double amount) {
         Customer customer = loadById(id);
         double newCredit = customer.getCredit() + amount;
@@ -59,6 +75,7 @@ public class CustomerService extends BaseService<Customer, Long> {
         return super.update(customer);
     }
 
+    @Transactional
     public Customer decreaseCredit(Long id, Double amount) {
         Customer customer = loadById(id);
         double credit = customer.getCredit();

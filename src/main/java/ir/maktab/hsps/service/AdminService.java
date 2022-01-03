@@ -6,6 +6,7 @@ import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
@@ -45,6 +46,19 @@ public class AdminService extends BaseService<Admin, Long> {
         if (passwordIsNotValid(admin.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
+        return super.update(admin);
+    }
+
+    @Transactional
+    public Admin changePassword(long adminId, String oldPass, String newPass) {
+        Admin admin = adminRepository.getById(adminId);
+        if (!Objects.equals(admin.getPassword(), oldPass)) {
+            throw new PasswordException("Old password doesn't match");
+        }
+        if (passwordIsNotValid(newPass)) {
+            throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
+        }
+        admin.setPassword(newPass);
         return super.update(admin);
     }
 

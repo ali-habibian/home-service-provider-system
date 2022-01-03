@@ -1,8 +1,10 @@
 package ir.maktab.hsps.service;
 
 import ir.maktab.hsps.entity.category.SubCategory;
+import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.Proficient;
 import ir.maktab.hsps.entity.user.UserStatus;
+import ir.maktab.hsps.exception.PasswordException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class ProficientServiceTest {
@@ -42,6 +44,26 @@ class ProficientServiceTest {
 
         Proficient result = proficientService.save(proficient);
         assertNotNull(result);
+    }
+
+    @Test
+    void test_change_password() {
+        Proficient proficient = proficientService.changePassword(1, "12345678asd", "456asd78");
+        assertEquals("456asd78", proficient.getPassword());
+    }
+
+    @Test
+    void test_change_password_with_wrong_old_pass() {
+        assertThrows(PasswordException.class, () ->
+                proficientService.changePassword(1, "123asd45", "456asd78")
+        );
+    }
+
+    @Test
+    void test_change_password_with_invalid_new_pass() {
+        assertThrows(PasswordException.class, () ->
+                proficientService.changePassword(1, "456asd78", "123")
+        );
     }
 
     @Test
