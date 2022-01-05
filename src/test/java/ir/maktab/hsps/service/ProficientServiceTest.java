@@ -22,14 +22,14 @@ class ProficientServiceTest {
     private ProficientService proficientService;
 
     @Autowired
-    SubCategoryService subCategoryService;
+    private SubCategoryService subCategoryService;
 
     @Test
     void save() {
         Proficient proficient = new Proficient();
-        proficient.setFirstName("First-Proficient-4");
-        proficient.setLastName("Last-Proficient-4");
-        proficient.setEmail("Email-Proficient-4@mail.com");
+        proficient.setFirstName("First-Proficient-6");
+        proficient.setLastName("Last-Proficient-6");
+        proficient.setEmail("Email-Proficient-6@mail.com");
         proficient.setPassword("12345678asd");
         proficient.setProficientStatus(UserStatus.NEW);
 

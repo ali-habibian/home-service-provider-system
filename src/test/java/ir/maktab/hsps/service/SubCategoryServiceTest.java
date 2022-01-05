@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,6 +21,9 @@ class SubCategoryServiceTest {
     @Autowired
     private MainCategoryService mainCategoryService;
 
+    @Autowired
+    private ProficientService proficientService;
+
     @Test
     void test_save() {
         MainCategory mainCategory = mainCategoryService.loadById(2L);
@@ -29,6 +34,18 @@ class SubCategoryServiceTest {
 
         SubCategory result = subCategoryService.save(subCategory);
         assertNotNull(result);
+    }
+
+    @Test
+    void test_add_proficient_isOk() {
+        SubCategory subCategory = subCategoryService.addProficient(2, 3);
+        assertTrue(subCategory.getProficients().contains(proficientService.loadById(3L)));
+    }
+
+    @Test
+    void test_remove_proficient_isOk() {
+        SubCategory subCategory = subCategoryService.removeProficient(2, 3);
+        assertFalse(subCategory.getProficients().contains(proficientService.loadById(3L)));
     }
 
     @Test

@@ -4,7 +4,6 @@ import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.user.Proficient;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -20,6 +19,6 @@ public class SubCategory extends Category {
     @OneToMany(mappedBy = "subCategory")
     private Set<HomeServiceOrder> homeServiceOrders;
 
-    @ManyToMany(mappedBy = "subCategories")
+    @ManyToMany(mappedBy = "subCategories", cascade = CascadeType.ALL)
     private Set<Proficient> proficients;
 }

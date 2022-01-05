@@ -4,21 +4,16 @@ import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.Review;
 import ir.maktab.hsps.entity.Transaction;
 import ir.maktab.hsps.entity.category.SubCategory;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.time.Instant;
 import java.util.Set;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Proficient extends User {
 
@@ -33,7 +28,7 @@ public class Proficient extends User {
 //    private Blob profileImg;
     private String profileImgUrl; // Max size: 300 KB
 
-    @OneToMany(mappedBy = "proficient", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proficient", cascade = {CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Set<HomeServiceOffer> homeServiceOffers;
 
     @OneToMany(mappedBy = "proficient", cascade = CascadeType.ALL)

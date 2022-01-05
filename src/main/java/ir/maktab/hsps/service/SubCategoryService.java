@@ -35,6 +35,11 @@ public class SubCategoryService extends BaseService<SubCategory, Long> {
         proficients.add(proficient);
         subCategory.setProficients(proficients);
 
+        Set<SubCategory> subCategories = proficient.getSubCategories();
+        subCategories.add(subCategory);
+        proficient.setSubCategories(subCategories);
+
+        proficientService.update(proficient);
         return super.update(subCategory);
     }
 
@@ -47,6 +52,11 @@ public class SubCategoryService extends BaseService<SubCategory, Long> {
         proficients.remove(proficient);
         subCategory.setProficients(proficients);
 
+        Set<SubCategory> subCategories = proficient.getSubCategories();
+        subCategories.remove(subCategory);
+        proficient.setSubCategories(subCategories);
+
+        proficientService.update(proficient);
         return super.update(subCategory);
     }
 }
