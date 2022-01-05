@@ -19,22 +19,22 @@ class CustomerServiceTest {
 
     @Test
     void test_save_customer_isOk() {
-        Address address = Address.builder()
-                .province("Province-6")
-                .city("City-6")
-                .street("Street-6")
-                .alley("Alley-6")
-                .plaque("6")
-                .build();
+//        Address address = Address.builder()
+//                .province("Province-9")
+//                .city("City-9")
+//                .street("Street-9")
+//                .alley("Alley-9")
+//                .plaque("9")
+//                .build();
 
         Customer customer = new Customer();
-        customer.setFirstName("First-Customer-2");
-        customer.setLastName("Last-Customer-2");
-        customer.setEmail("Email-Customer-2@mail.com");
+        customer.setFirstName("First-Customer-7");
+        customer.setLastName("Last-Customer-7");
+        customer.setEmail("Email-Customer-17@mail.com");
         customer.setPassword("12345678asd");
 //        customer.setCustomerStatus(UserStatus.NEW);
         customer.setCredit(10000d);
-        customer.setAddress(address);
+//        customer.setAddress(address);
 
         Customer result = customerService.save(customer);
         assertNotNull(result);

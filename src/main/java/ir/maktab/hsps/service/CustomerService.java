@@ -1,25 +1,24 @@
 package ir.maktab.hsps.service;
 
-import ir.maktab.hsps.entity.user.Admin;
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.exception.CreditException;
 import ir.maktab.hsps.exception.EmailException;
 import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.CustomerRepository;
+import ir.maktab.hsps.util.Utility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerService extends BaseService<Customer, Long> {
     private final CustomerRepository customerRepository;
+    private final Utility utility;
 
     @PostConstruct
     public void init() {
@@ -33,7 +32,7 @@ public class CustomerService extends BaseService<Customer, Long> {
             throw new EmailException("Another customer with this email already exists");
         }
 
-        if (passwordIsNotValid(customer.getPassword())) {
+        if (utility.passwordIsNotValid(customer.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
         customer.setCustomerStatus(UserStatus.NEW);
@@ -47,7 +46,7 @@ public class CustomerService extends BaseService<Customer, Long> {
             throw new EmailException("Another customer with this email already exists");
         }
 
-        if (passwordIsNotValid(customer.getPassword())) {
+        if (utility.passwordIsNotValid(customer.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
         customer.setCustomerStatus(UserStatus.AWAITING_APPROVAL);
@@ -60,7 +59,7 @@ public class CustomerService extends BaseService<Customer, Long> {
         if (!Objects.equals(customer.getPassword(), oldPass)) {
             throw new PasswordException("Old password doesn't match");
         }
-        if (passwordIsNotValid(newPass)) {
+        if (utility.passwordIsNotValid(newPass)) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
         customer.setPassword(newPass);
@@ -89,16 +88,5 @@ public class CustomerService extends BaseService<Customer, Long> {
 
     public Customer loadByEmail(String email) {
         return customerRepository.findByEmail(email);
-    }
-
-    private boolean passwordIsNotValid(String password) {
-        if (password == null) {
-            return true;
-        }
-
-        String regex = "^(?=.*[0-9])(?=.*[a-z,A-Z]).{8,20}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(password);
-        return !matcher.matches();
     }
 }

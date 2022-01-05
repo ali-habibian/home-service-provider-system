@@ -19,11 +19,11 @@ class AddressServiceTest {
     @Test
     void test_save() {
         Address address = Address.builder()
-                .province("Province-4")
-                .city("City-4")
-                .street("Street-4")
-                .alley("Alley-4")
-                .plaque("4")
+                .province("Province-5")
+                .city("City-5")
+                .street("Street-5")
+                .alley("Alley-5")
+                .plaque("5")
                 .build();
 
         Address result = addressService.save(address);

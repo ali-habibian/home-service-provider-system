@@ -1,6 +1,5 @@
 package ir.maktab.hsps.repository;
 
-import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.Proficient;
 import org.springframework.data.jpa.repository.JpaRepository;
 

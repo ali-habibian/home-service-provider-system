@@ -17,9 +17,9 @@ public class SubCategory extends Category {
     @ManyToOne
     private MainCategory mainCategory;
 
-    @OneToMany(mappedBy = "subCategory", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subCategory")
     private Set<HomeServiceOrder> homeServiceOrders;
 
-    @ManyToMany(mappedBy = "subCategories", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "subCategories")
     private Set<Proficient> proficients;
 }

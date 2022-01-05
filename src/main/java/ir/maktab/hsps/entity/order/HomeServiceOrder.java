@@ -22,7 +22,7 @@ public class HomeServiceOrder {
     @ManyToOne
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private SubCategory subCategory;
 
     private Double suggestedPrice;
@@ -38,7 +38,7 @@ public class HomeServiceOrder {
 
     private OrderStatus orderStatus = OrderStatus.WAITING_FOR_PROFICIENT_SUGGESTION;
 
-    @OneToMany(mappedBy = "homeServiceOrder", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @OneToMany(mappedBy = "homeServiceOrder", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<HomeServiceOffer> homeServiceOffers;
 
     @OneToOne(cascade = CascadeType.ALL)
