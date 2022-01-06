@@ -38,9 +38,13 @@ public class HomeServiceOrder {
 
     private OrderStatus orderStatus = OrderStatus.WAITING_FOR_PROFICIENT_SUGGESTION;
 
-    @OneToMany(mappedBy = "homeServiceOrder", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "homeServiceOrder", fetch = FetchType.EAGER)
     private Set<HomeServiceOffer> homeServiceOffers;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private HomeServiceOffer acceptedOffer;
+
+    public void addOffer(HomeServiceOffer homeServiceOffer) {
+        this.homeServiceOffers.add(homeServiceOffer);
+    }
 }

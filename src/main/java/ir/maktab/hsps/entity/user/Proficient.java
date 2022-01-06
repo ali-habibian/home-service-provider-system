@@ -37,6 +37,6 @@ public class Proficient extends User {
     @OneToMany(mappedBy = "proficient", cascade = CascadeType.ALL)
     private Set<Transaction> transactions;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Set<SubCategory> subCategories;
 }

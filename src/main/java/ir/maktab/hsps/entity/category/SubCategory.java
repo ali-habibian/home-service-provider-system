@@ -2,6 +2,7 @@ package ir.maktab.hsps.entity.category;
 
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.user.Proficient;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,8 @@ public class SubCategory extends Category {
     @OneToMany(mappedBy = "subCategory")
     private Set<HomeServiceOrder> homeServiceOrders;
 
-    @ManyToMany(mappedBy = "subCategories", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "subCategories")
     private Set<Proficient> proficients;
+
+
 }

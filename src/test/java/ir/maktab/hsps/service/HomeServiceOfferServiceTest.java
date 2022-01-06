@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -49,5 +51,25 @@ class HomeServiceOfferServiceTest {
     void test_delete() {
         homeServiceOfferService.deleteById(1L);
         assertThrows(ResourceNotFoundException.class, () -> homeServiceOfferService.loadById(1L));
+    }
+
+    @Test
+    void test_send_offer_isOk() {
+        HomeServiceOffer homeServiceOffer = new HomeServiceOffer();
+        homeServiceOffer.setProficient(proficientService.loadById(7L));
+        homeServiceOffer.setSuggestedPrice(5500.0);
+        homeServiceOffer.setWorkDuration("2 Days");
+        homeServiceOffer.setHomeServiceOrder(homeServiceOrderService.loadById(4L));
+
+        HomeServiceOffer result = homeServiceOfferService.sendOffer(homeServiceOffer);
+        assertNotNull(result);
+    }
+
+    @Test
+    void test_load_by_order_Id_isOk() {
+        List<HomeServiceOffer> homeServiceOffers = homeServiceOfferService.loadByOrderIdSortAsc(4);
+        homeServiceOffers.forEach(ho -> {
+            System.out.println(ho.getId() + ": " + ho.getSuggestedPrice());
+        });
     }
 }
