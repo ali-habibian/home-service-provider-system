@@ -41,7 +41,7 @@ public class HomeServiceOrder {
     @OneToMany(mappedBy = "homeServiceOrder", fetch = FetchType.EAGER)
     private Set<HomeServiceOffer> homeServiceOffers;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private HomeServiceOffer acceptedOffer;
 
     public void addOffer(HomeServiceOffer homeServiceOffer) {

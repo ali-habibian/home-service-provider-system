@@ -57,7 +57,7 @@ class HomeServiceOfferServiceTest {
     void test_send_offer_isOk() {
         HomeServiceOffer homeServiceOffer = new HomeServiceOffer();
         homeServiceOffer.setProficient(proficientService.loadById(7L));
-        homeServiceOffer.setSuggestedPrice(5500.0);
+        homeServiceOffer.setSuggestedPrice(6000.0);
         homeServiceOffer.setWorkDuration("2 Days");
         homeServiceOffer.setHomeServiceOrder(homeServiceOrderService.loadById(4L));
 

@@ -1,6 +1,7 @@
 package ir.maktab.hsps.service;
 
 import ir.maktab.hsps.entity.Address;
+import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.category.SubCategory;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.user.Customer;
@@ -15,6 +16,9 @@ class HomeServiceOrderServiceTest {
 
     @Autowired
     private HomeServiceOrderService homeServiceOrderService;
+
+    @Autowired
+    private HomeServiceOfferService homeServiceOfferService;
 
     @Autowired
     private CustomerService customerService;
@@ -43,6 +47,15 @@ class HomeServiceOrderServiceTest {
     void test_load_by_id() {
         HomeServiceOrder homeServiceOrder = homeServiceOrderService.loadById(4L);
         assertNotNull(homeServiceOrder);
+    }
+
+    @Test
+    void test_accept_offer_isOk() {
+        HomeServiceOrder homeServiceOrder = homeServiceOrderService.loadById(4L);
+        HomeServiceOffer acceptedOffer = homeServiceOfferService.loadById(3L);
+        homeServiceOrder.setAcceptedOffer(acceptedOffer);
+        HomeServiceOrder result = homeServiceOrderService.acceptOffer(homeServiceOrder);
+        assertNotNull(result);
     }
 
 }
