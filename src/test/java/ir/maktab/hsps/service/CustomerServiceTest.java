@@ -1,9 +1,11 @@
 package ir.maktab.hsps.service;
 
-import ir.maktab.hsps.entity.Address;
-import ir.maktab.hsps.entity.user.Admin;
+import ir.maktab.hsps.api.user.UserChangePasswordParam;
+import ir.maktab.hsps.api.user.UserChangePasswordResult;
+import ir.maktab.hsps.api.user.customer.CustomerCreateParam;
+import ir.maktab.hsps.api.user.customer.CustomerCreateResult;
 import ir.maktab.hsps.entity.user.Customer;
-import ir.maktab.hsps.entity.user.UserStatus;
+import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.exception.CreditException;
 import ir.maktab.hsps.exception.PasswordException;
 import org.junit.jupiter.api.Test;
@@ -19,68 +21,70 @@ class CustomerServiceTest {
 
     @Test
     void test_save_customer_isOk() {
-//        Address address = Address.builder()
-//                .province("Province-9")
-//                .city("City-9")
-//                .street("Street-9")
-//                .alley("Alley-9")
-//                .plaque("9")
-//                .build();
+        CustomerCreateParam createParam = CustomerCreateParam.builder()
+                .firstName("First-Customer-9")
+                .lastName("Last-Customer-9")
+                .email("Email-Customer-9@mail.com")
+                .password("12345678asd")
+                .userRole(UserRole.CUSTOMER)
+                .build();
 
-        Customer customer = new Customer();
-        customer.setFirstName("First-Customer-7");
-        customer.setLastName("Last-Customer-7");
-        customer.setEmail("Email-Customer-17@mail.com");
-        customer.setPassword("12345678asd");
-//        customer.setCustomerStatus(UserStatus.NEW);
-        customer.setCredit(10000d);
-//        customer.setAddress(address);
-
-        Customer result = customerService.save(customer);
-        assertNotNull(result);
+        CustomerCreateResult result = customerService.saveCustomer(createParam);
+        assertEquals(20, result.getCustomerId());
     }
 
     @Test
     void test_change_password() {
-        Customer customer = customerService.changePassword(1, "12345678asd", "456asd78");
-        assertEquals("456asd78", customer.getPassword());
+        UserChangePasswordParam changePasswordParam = UserChangePasswordParam.builder()
+                .userId(1L)
+                .currentPassword("456asd78")
+                .newPassword("12345678asd")
+                .newPasswordConfirm("12345678asd")
+                .build();
+
+        UserChangePasswordResult result = customerService.changePassword(changePasswordParam);
+        assertEquals("12345678asd", result.getNewPassword());
     }
 
     @Test
     void test_change_password_with_wrong_old_pass() {
+        UserChangePasswordParam changePasswordParam = UserChangePasswordParam.builder()
+                .userId(1L)
+                .currentPassword("456asd78")
+                .newPassword("12345678asd")
+                .newPasswordConfirm("12345678asd")
+                .build();
+
         assertThrows(PasswordException.class, () ->
-                customerService.changePassword(1, "123asd45", "456asd78")
+                customerService.changePassword(changePasswordParam)
         );
     }
 
     @Test
     void test_change_password_with_invalid_new_pass() {
+        UserChangePasswordParam changePasswordParam = UserChangePasswordParam.builder()
+                .userId(1L)
+                .currentPassword("12345678asd")
+                .newPassword("123")
+                .newPasswordConfirm("123")
+                .build();
+
         assertThrows(PasswordException.class, () ->
-                customerService.changePassword(1, "456asd78", "123")
+                customerService.changePassword(changePasswordParam)
         );
     }
 
     @Test
-    void test_load_by_id(){
-        Customer customer = customerService.loadById(1L);
-        System.out.println("customer.getAddress().getStreet() = " + customer.getAddress().getStreet());
-    }
+    void test_change_password_with_not_confirmed_new_pass() {
+        UserChangePasswordParam changePasswordParam = UserChangePasswordParam.builder()
+                .userId(1L)
+                .currentPassword("12345678asd")
+                .newPassword("123asd456")
+                .newPasswordConfirm("123fgh456")
+                .build();
 
-    @Test
-    void test_increase_credit() {
-        Customer customer = customerService.increaseCredit(1L, 5000.0);
-        assertEquals(15000.0, customer.getCredit());
+        assertThrows(PasswordException.class, () ->
+                customerService.changePassword(changePasswordParam)
+        );
     }
-
-    @Test
-    void test_decrease_credit_isOk() {
-        Customer customer = customerService.decreaseCredit(1L, 5000.0);
-        assertEquals(10000.0, customer.getCredit());
-    }
-
-    @Test
-    void test_decrease_credit_credit_not_enough() {
-        assertThrows(CreditException.class, () -> customerService.decreaseCredit(1L, 15000.0));
-    }
-
 }

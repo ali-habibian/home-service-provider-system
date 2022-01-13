@@ -20,20 +20,20 @@ class ReviewServiceTest {
     @Autowired
     private HomeServiceOfferService homeServiceOfferService;
 
-    @Test
-    void test_save() {
-        Review review = new Review();
-        HomeServiceOffer homeServiceOffer = homeServiceOfferService.loadById(2L);
-        Proficient proficient = homeServiceOffer.getProficient();
-        Customer customer = customerService.loadById(1L);
-
-        review.setComment("Comment-1");
-        review.setRating(5);
-        review.setCustomer(customer);
-        review.setHomeServiceOffer(homeServiceOffer);
-        review.setProficient(proficient);
-
-        Review result = reviewService.save(review);
-        assertNotNull(result);
-    }
+//    @Test
+//    void test_save() {
+//        Review review = new Review();
+//        HomeServiceOffer homeServiceOffer = homeServiceOfferService.loadById(2L);
+//        Proficient proficient = homeServiceOffer.getProficient();
+//        Customer customer = customerService.loadById(1L);
+//
+//        review.setComment("Comment-1");
+//        review.setRating(5);
+//        review.setCustomer(customer);
+//        review.setHomeServiceOffer(homeServiceOffer);
+//        review.setProficient(proficient);
+//
+//        Review result = reviewService.save(review);
+//        assertNotNull(result);
+//    }
 }

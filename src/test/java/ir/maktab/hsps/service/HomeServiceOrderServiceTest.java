@@ -26,22 +26,22 @@ class HomeServiceOrderServiceTest {
     @Autowired
     private SubCategoryService subCategoryService;
 
-    @Test
-    void test_save() {
-        Customer customer = customerService.loadById(2L);
-        SubCategory subCategory = subCategoryService.loadById(1L);
-        Address address = customer.getAddress();
-        HomeServiceOrder homeServiceOrder = new HomeServiceOrder();
-        homeServiceOrder.setCustomer(customer);
-        homeServiceOrder.setSubCategory(subCategory);
-        homeServiceOrder.setSuggestedPrice(10000.0);
-        homeServiceOrder.setComment("Home service order 3");
-        homeServiceOrder.setAddress(address);
-
-        HomeServiceOrder result = homeServiceOrderService.save(homeServiceOrder);
-        System.out.println("result.getId() = " + result.getId());
-        assertNotNull(result);
-    }
+//    @Test
+//    void test_save() {
+//        Customer customer = customerService.loadById(2L);
+//        SubCategory subCategory = subCategoryService.loadById(1L);
+//        Address address = customer.getAddress();
+//        HomeServiceOrder homeServiceOrder = new HomeServiceOrder();
+//        homeServiceOrder.setCustomer(customer);
+//        homeServiceOrder.setSubCategory(subCategory);
+//        homeServiceOrder.setSuggestedPrice(10000.0);
+//        homeServiceOrder.setComment("Home service order 3");
+//        homeServiceOrder.setAddress(address);
+//
+//        HomeServiceOrder result = homeServiceOrderService.save(homeServiceOrder);
+//        System.out.println("result.getId() = " + result.getId());
+//        assertNotNull(result);
+//    }
 
     @Test
     void test_load_by_id() {
@@ -51,6 +51,7 @@ class HomeServiceOrderServiceTest {
 
     @Test
     void test_accept_offer_isOk() {
+        // TODO
         HomeServiceOrder homeServiceOrder = homeServiceOrderService.loadById(4L);
         HomeServiceOffer acceptedOffer = homeServiceOfferService.loadById(3L);
         homeServiceOrder.setAcceptedOffer(acceptedOffer);

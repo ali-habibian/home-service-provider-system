@@ -50,6 +50,7 @@ public class HomeServiceOfferService extends BaseService<HomeServiceOffer, Long>
     }
 
     public List<HomeServiceOffer> loadByOrderIdSortAsc(long orderId) {
+        // speciphoication
         return homeServiceOfferRepository.findAllByHomeServiceOrder_IdOrderBySuggestedPriceAsc(orderId);
     }
 }

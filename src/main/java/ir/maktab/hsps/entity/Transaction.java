@@ -23,10 +23,10 @@ public class Transaction {
     @CreationTimestamp
     private Instant createDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Proficient proficient;
 
     @OneToOne

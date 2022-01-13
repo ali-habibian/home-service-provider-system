@@ -17,7 +17,7 @@ public class HomeServiceOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Proficient proficient;
 
     @CreationTimestamp

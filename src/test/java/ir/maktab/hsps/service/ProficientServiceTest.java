@@ -1,18 +1,19 @@
 package ir.maktab.hsps.service;
 
-import ir.maktab.hsps.entity.category.SubCategory;
-import ir.maktab.hsps.entity.user.Customer;
+import ir.maktab.hsps.api.user.UserChangePasswordParam;
+import ir.maktab.hsps.api.user.UserChangePasswordResult;
+import ir.maktab.hsps.api.user.proficient.ProficientCreateParam;
+import ir.maktab.hsps.api.user.proficient.ProficientModel;
 import ir.maktab.hsps.entity.user.Proficient;
-import ir.maktab.hsps.entity.user.UserStatus;
+import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.exception.PasswordException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -25,44 +26,72 @@ class ProficientServiceTest {
     private SubCategoryService subCategoryService;
 
     @Test
-    void save() {
-        Proficient proficient = new Proficient();
-        proficient.setFirstName("First-Proficient-6");
-        proficient.setLastName("Last-Proficient-6");
-        proficient.setEmail("Email-Proficient-6@mail.com");
-        proficient.setPassword("12345678asd");
-        proficient.setProficientStatus(UserStatus.NEW);
+    void save() throws IOException {
 
-        SubCategory subCategory = subCategoryService.loadById(1L);
-        SubCategory subCategory2 = subCategoryService.loadById(2L);
+        ProficientCreateParam createParam = ProficientCreateParam.builder()
+                .firstName("First-Proficient-9")
+                .lastName("Last-Proficient-9")
+                .email("Email-Proficient-9@mail.com")
+                .password("12345678asd")
+                .userRole(UserRole.PROFICIENT)
+                .build();
 
-        Set<SubCategory> subCategorySet = new HashSet<>();
-        subCategorySet.add(subCategory);
-        subCategorySet.add(subCategory2);
-
-        proficient.setSubCategories(subCategorySet);
-
-        Proficient result = proficientService.save(proficient);
-        assertNotNull(result);
+        ProficientModel result = proficientService.save(createParam);
+        System.out.println(result.getProfileImg());
     }
 
     @Test
     void test_change_password() {
-        Proficient proficient = proficientService.changePassword(1, "12345678asd", "456asd78");
-        assertEquals("456asd78", proficient.getPassword());
+        UserChangePasswordParam changePasswordParam = UserChangePasswordParam.builder()
+                .userId(1L)
+                .currentPassword("456asd78")
+                .newPassword("12345678asd")
+                .newPasswordConfirm("12345678asd")
+                .build();
+
+        UserChangePasswordResult result = proficientService.changePassword(changePasswordParam);
+        assertEquals("12345678asd", result.getNewPassword());
     }
 
     @Test
     void test_change_password_with_wrong_old_pass() {
+        UserChangePasswordParam changePasswordParam = UserChangePasswordParam.builder()
+                .userId(1L)
+                .currentPassword("456asd78")
+                .newPassword("12345678asd")
+                .newPasswordConfirm("12345678asd")
+                .build();
+
         assertThrows(PasswordException.class, () ->
-                proficientService.changePassword(1, "123asd45", "456asd78")
+                proficientService.changePassword(changePasswordParam)
         );
     }
 
     @Test
     void test_change_password_with_invalid_new_pass() {
+        UserChangePasswordParam changePasswordParam = UserChangePasswordParam.builder()
+                .userId(1L)
+                .currentPassword("12345678asd")
+                .newPassword("123")
+                .newPasswordConfirm("123")
+                .build();
+
         assertThrows(PasswordException.class, () ->
-                proficientService.changePassword(1, "456asd78", "123")
+                proficientService.changePassword(changePasswordParam)
+        );
+    }
+
+    @Test
+    void test_change_password_with_not_confirmed_new_pass() {
+        UserChangePasswordParam changePasswordParam = UserChangePasswordParam.builder()
+                .userId(1L)
+                .currentPassword("12345678asd")
+                .newPassword("123asd456")
+                .newPasswordConfirm("123fgh456")
+                .build();
+
+        assertThrows(PasswordException.class, () ->
+                proficientService.changePassword(changePasswordParam)
         );
     }
 

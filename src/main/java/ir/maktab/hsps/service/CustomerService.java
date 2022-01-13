@@ -1,5 +1,11 @@
 package ir.maktab.hsps.service;
 
+import ir.maktab.hsps.api.user.UserChangePasswordParam;
+import ir.maktab.hsps.api.user.UserChangePasswordResult;
+import ir.maktab.hsps.api.user.customer.CustomerCreateParam;
+import ir.maktab.hsps.api.user.customer.CustomerCreateResult;
+import ir.maktab.hsps.api.user.customer.CustomerListResult;
+import ir.maktab.hsps.api.user.customer.CustomerModel;
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.exception.CreditException;
@@ -12,21 +18,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService extends BaseService<Customer, Long> {
+public class CustomerService {
     private final CustomerRepository customerRepository;
     private final Utility utility;
 
-    @PostConstruct
-    public void init() {
-        setJpaRepository(customerRepository);
-    }
-
-    @Override
-    public Customer save(Customer customer) {
+    public CustomerCreateResult saveCustomer(CustomerCreateParam createParam) {
+        Customer customer = createParam.convert2Customer();
         Customer loadByEmail = loadByEmail(customer.getEmail());
         if (loadByEmail != null) {
             throw new EmailException("Another customer with this email already exists");
@@ -36,25 +39,34 @@ public class CustomerService extends BaseService<Customer, Long> {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
         customer.setCustomerStatus(UserStatus.NEW);
-        return super.save(customer);
+        customer.setCredit(0.0);
+        Customer saveResult = customerRepository.save(customer);
+        return new CustomerCreateResult(saveResult.getId());
     }
 
-    @Override
-    public Customer update(Customer customer) {
-        Customer loadByEmail = loadByEmail(customer.getEmail());
-        if (loadByEmail != null && !Objects.equals(loadByEmail.getId(), customer.getId())) {
-            throw new EmailException("Another customer with this email already exists");
-        }
-
-        if (utility.passwordIsNotValid(customer.getPassword())) {
-            throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
-        }
-        customer.setCustomerStatus(UserStatus.AWAITING_APPROVAL);
-        return super.update(customer);
-    }
+//    public Customer update(Customer customer) { // TODO change to use DTO
+//        Customer loadByEmail = loadByEmail(customer.getEmail());
+//        if (loadByEmail != null && !Objects.equals(loadByEmail.getId(), customer.getId())) {
+//            throw new EmailException("Another customer with this email already exists");
+//        }
+//
+//        if (utility.passwordIsNotValid(customer.getPassword())) {
+//            throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
+//        }
+//        customer.setCustomerStatus(UserStatus.AWAITING_APPROVAL);
+//        return customerRepository.save(customer);
+//    }
 
     @Transactional
-    public Customer changePassword(long customerId, String oldPass, String newPass) {
+    public UserChangePasswordResult changePassword(UserChangePasswordParam changePasswordParam) {
+        long customerId = changePasswordParam.getUserId();
+        String oldPass = changePasswordParam.getCurrentPassword();
+        String newPass = changePasswordParam.getNewPassword();
+        String confirmNewPass = changePasswordParam.getNewPasswordConfirm();
+
+        if (!newPass.equals(confirmNewPass)) {
+            throw new PasswordException("New password and confirm password doesn't match");
+        }
         Customer customer = customerRepository.getById(customerId);
         if (!Objects.equals(customer.getPassword(), oldPass)) {
             throw new PasswordException("Old password doesn't match");
@@ -63,30 +75,50 @@ public class CustomerService extends BaseService<Customer, Long> {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
         customer.setPassword(newPass);
-        return super.update(customer);
+        Customer updateResult = customerRepository.save(customer);
+        return new UserChangePasswordResult(updateResult.getId(), updateResult.getPassword());
     }
 
-    @Transactional
-    public Customer increaseCredit(Long id, Double amount) {
-        Customer customer = loadById(id);
-        double newCredit = customer.getCredit() + amount;
-        customer.setCredit(newCredit);
-        return super.update(customer);
+//    @Transactional
+//    public Customer increaseCredit(Long id, Double amount) { // TODO change to use DTO
+//        Customer customer = loadById(id);
+//        double newCredit = customer.getCredit() + amount;
+//        customer.setCredit(newCredit);
+//        return super.update(customer);
+//    }
+
+//    @Transactional
+//    public Customer decreaseCredit(Long id, Double amount) { // TODO change to use DTO
+//        Customer customer = loadById(id);
+//        double credit = customer.getCredit();
+//        if (credit < amount) {
+//            throw new CreditException("Credit is not enough");
+//        }
+//        double newCredit = credit - amount;
+//        customer.setCredit(newCredit);
+//        return super.update(customer);
+//    }
+
+    public CustomerListResult loadAllCustomers() {
+        List<Customer> customerList = customerRepository.findAll();
+        CustomerListResult customerListResult = new CustomerListResult();
+        customerList.forEach((c) -> customerListResult.addCustomerModel(new CustomerModel().convertCustomer2Model(c)));
+        return customerListResult;
     }
 
-    @Transactional
-    public Customer decreaseCredit(Long id, Double amount) {
-        Customer customer = loadById(id);
-        double credit = customer.getCredit();
-        if (credit < amount) {
-            throw new CreditException("Credit is not enough");
-        }
-        double newCredit = credit - amount;
-        customer.setCredit(newCredit);
-        return super.update(customer);
+    public CustomerListResult loadAllCustomersByStatus(UserStatus status) {
+        List<Customer> customerList = customerRepository.findAllByCustomerStatus(status);
+        CustomerListResult customerListResult = new CustomerListResult();
+        customerList.forEach((c) -> customerListResult.addCustomerModel(new CustomerModel().convertCustomer2Model(c)));
+        return customerListResult;
     }
 
-    public Customer loadByEmail(String email) {
+    public CustomerModel loadById(long customerId) {
+        Customer customer = customerRepository.getById(customerId);
+        return new CustomerModel().convertCustomer2Model(customer);
+    }
+
+    private Customer loadByEmail(String email) {
         return customerRepository.findByEmail(email);
     }
 }
