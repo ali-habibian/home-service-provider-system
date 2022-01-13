@@ -1,9 +1,9 @@
 package ir.maktab.hsps.controller;
 
+import ir.maktab.hsps.api.address.AddressUpdateParam;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
-import ir.maktab.hsps.api.user.customer.CustomerCreateParam;
-import ir.maktab.hsps.api.user.customer.CustomerCreateResult;
+import ir.maktab.hsps.api.user.customer.*;
 import ir.maktab.hsps.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,5 +29,20 @@ public class CustomerController {
         changePasswordParam.setUserId(id);
         UserChangePasswordResult userChangePasswordResult = customerService.changePassword(changePasswordParam);
         return ResponseEntity.ok(userChangePasswordResult);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerUpdateResult> update(@PathVariable long id, @RequestBody CustomerUpdateParam updateParam) {
+
+        CustomerModel customerModel = customerService.loadById(id);
+        Long addressId = customerModel.getAddressModel().getId();
+        AddressUpdateParam address = updateParam.getAddress();
+        address.setId(addressId);
+        updateParam.setAddress(address);
+
+        updateParam.setId(id);
+
+        CustomerUpdateResult customerUpdateResult = customerService.update(updateParam);
+        return ResponseEntity.ok(customerUpdateResult);
     }
 }

@@ -2,13 +2,10 @@ package ir.maktab.hsps.service;
 
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
-import ir.maktab.hsps.api.user.customer.CustomerCreateParam;
-import ir.maktab.hsps.api.user.customer.CustomerCreateResult;
-import ir.maktab.hsps.api.user.customer.CustomerListResult;
-import ir.maktab.hsps.api.user.customer.CustomerModel;
+import ir.maktab.hsps.api.user.customer.*;
 import ir.maktab.hsps.entity.user.Customer;
+import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.entity.user.UserStatus;
-import ir.maktab.hsps.exception.CreditException;
 import ir.maktab.hsps.exception.EmailException;
 import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.CustomerRepository;
@@ -17,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,18 +39,27 @@ public class CustomerService {
         return new CustomerCreateResult(saveResult.getId());
     }
 
-//    public Customer update(Customer customer) { // TODO change to use DTO
-//        Customer loadByEmail = loadByEmail(customer.getEmail());
-//        if (loadByEmail != null && !Objects.equals(loadByEmail.getId(), customer.getId())) {
-//            throw new EmailException("Another customer with this email already exists");
-//        }
-//
-//        if (utility.passwordIsNotValid(customer.getPassword())) {
-//            throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
-//        }
-//        customer.setCustomerStatus(UserStatus.AWAITING_APPROVAL);
-//        return customerRepository.save(customer);
-//    }
+    public CustomerUpdateResult update(CustomerUpdateParam updateParam) {
+        Customer customer = updateParam.convert2Customer();
+
+        Customer customerInDb = customerRepository.getById(customer.getId());
+        if (!customerInDb.getPassword().equals(customer.getPassword())) {
+            throw new PasswordException("Password is incorrect");
+        }
+
+        Customer loadByEmail = loadByEmail(customer.getEmail());
+        if (loadByEmail != null && !Objects.equals(loadByEmail.getId(), customer.getId())) {
+            throw new EmailException("Another customer with this email already exists");
+        }
+
+        customer.setUserRole(UserRole.CUSTOMER);
+        customer.setCustomerStatus(UserStatus.AWAITING_APPROVAL);
+        Customer result = customerRepository.save(customer);
+        return CustomerUpdateResult.builder()
+                .id(result.getId())
+                .success(true)
+                .build();
+    }
 
     @Transactional
     public UserChangePasswordResult changePassword(UserChangePasswordParam changePasswordParam) {
