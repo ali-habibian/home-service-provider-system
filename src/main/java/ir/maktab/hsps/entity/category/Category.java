@@ -37,9 +37,4 @@ public class Category {
 
         return id.equals(category.id);
     }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
 }

@@ -2,16 +2,10 @@ package ir.maktab.hsps.service;
 
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
-import ir.maktab.hsps.api.user.customer.CustomerListResult;
-import ir.maktab.hsps.api.user.customer.CustomerModel;
-import ir.maktab.hsps.api.user.proficient.ProficientCreateParam;
-import ir.maktab.hsps.api.user.proficient.ProficientListResult;
-import ir.maktab.hsps.api.user.proficient.ProficientModel;
-import ir.maktab.hsps.entity.user.Customer;
+import ir.maktab.hsps.api.user.proficient.*;
 import ir.maktab.hsps.entity.user.Proficient;
 import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.entity.user.UserStatus;
-import ir.maktab.hsps.exception.CreditException;
 import ir.maktab.hsps.exception.EmailException;
 import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.ProficientRepository;
@@ -20,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -59,6 +52,29 @@ public class ProficientService {
         }
         proficient.setProficientStatus(UserStatus.AWAITING_APPROVAL);
         return proficientRepository.save(proficient);
+    }
+
+    public ProficientUpdateResult updateProficient(ProficientUpdateParam updateParam) throws IOException {
+        Proficient proficient = updateParam.convert2Proficient();
+
+        Proficient proficientInDb = proficientRepository.getById(proficient.getId());
+        if (!proficientInDb.getPassword().equals(proficient.getPassword())) {
+            throw new PasswordException("Password is incorrect");
+        }
+
+        Proficient loadByEmail = loadByEmail(proficient.getEmail());
+        if (loadByEmail != null && !Objects.equals(loadByEmail.getId(), proficient.getId())) {
+            throw new EmailException("Another proficient with this email already exists");
+        }
+
+        proficient.setUserRole(UserRole.PROFICIENT);
+        proficient.setProficientStatus(UserStatus.AWAITING_APPROVAL);
+        Proficient result = proficientRepository.save(proficient);
+
+        return ProficientUpdateResult.builder()
+                .id(result.getId())
+                .success(true)
+                .build();
     }
 
     @Transactional
@@ -131,6 +147,6 @@ public class ProficientService {
     }
 
     public Proficient loadById(long proficientId) {
-        return null;
+        return proficientRepository.getById(proficientId);
     }
 }

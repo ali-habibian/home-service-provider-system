@@ -117,9 +117,14 @@ public class CustomerService {
         return customerListResult;
     }
 
-    public CustomerModel loadById(long customerId) {
+    public CustomerModel loadByIdReturnModel(long customerId) {
         Customer customer = customerRepository.getById(customerId);
         return new CustomerModel().convertCustomer2Model(customer);
+    }
+
+    @Transactional(readOnly = true)
+    public Customer loadById(long customerId) {
+        return customerRepository.getById(customerId);
     }
 
     private Customer loadByEmail(String email) {

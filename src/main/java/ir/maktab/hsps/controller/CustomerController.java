@@ -34,7 +34,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     public ResponseEntity<CustomerUpdateResult> update(@PathVariable long id, @RequestBody CustomerUpdateParam updateParam) {
 
-        CustomerModel customerModel = customerService.loadById(id);
+        CustomerModel customerModel = customerService.loadByIdReturnModel(id);
         Long addressId = customerModel.getAddressModel().getId();
         AddressUpdateParam address = updateParam.getAddress();
         address.setId(addressId);

@@ -4,6 +4,7 @@ import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.Review;
 import ir.maktab.hsps.entity.Transaction;
 import ir.maktab.hsps.entity.category.SubCategory;
+import ir.maktab.hsps.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -76,5 +77,19 @@ public class Proficient extends User {
         }
         transactions.add(transaction);
         transaction.setProficient(this);
+    }
+
+    public void addSubCategory(SubCategory subCategory) {
+        if (subCategories == null) {
+            subCategories = new HashSet<>();
+        }
+        subCategories.add(subCategory);
+    }
+
+    public void removeSubCategory(SubCategory subCategory) {
+        if (subCategories == null) {
+            throw new ResourceNotFoundException("subCategory", "id", subCategory.getId());
+        }
+        subCategories.remove(subCategory);
     }
 }

@@ -36,9 +36,4 @@ public class Address {
 
         return id.equals(address.id);
     }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
 }

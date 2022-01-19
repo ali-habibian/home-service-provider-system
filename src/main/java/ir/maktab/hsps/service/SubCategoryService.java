@@ -1,5 +1,10 @@
 package ir.maktab.hsps.service;
 
+import ir.maktab.hsps.api.category.CategoryCreateResult;
+import ir.maktab.hsps.api.category.sub_category.AddProficientToSubCatResult;
+import ir.maktab.hsps.api.category.sub_category.RemoveProficientFromSubCatResult;
+import ir.maktab.hsps.api.category.sub_category.SubCategoryCreateParam;
+import ir.maktab.hsps.entity.category.MainCategory;
 import ir.maktab.hsps.entity.category.SubCategory;
 import ir.maktab.hsps.entity.user.Proficient;
 import ir.maktab.hsps.repository.SubCategoryRepository;
@@ -7,19 +12,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class SubCategoryService extends BaseService<SubCategory, Long> {
+public class SubCategoryService {
     private final SubCategoryRepository subCategoryRepository;
+    private final MainCategoryService mainCategoryService;
     private final ProficientService proficientService;
 
-    @PostConstruct
-    public void init() {
-        setJpaRepository(subCategoryRepository);
+    @Transactional
+    public CategoryCreateResult saveSubCategory(SubCategoryCreateParam createParam) {
+        SubCategory subCategory = new SubCategory();
+        subCategory.setName(createParam.getName());
+
+        MainCategory mainCategory = mainCategoryService.loadById(createParam.getMainCategoryId());
+        subCategory.setMainCategory(mainCategory);
+        mainCategory.addSubCategory(subCategory);
+
+        SubCategory saveResult = subCategoryRepository.save(subCategory);
+        return new CategoryCreateResult(saveResult.getId());
     }
 
     public List<SubCategory> loadByMainCategoryId(long mainCatId) {
@@ -27,36 +39,37 @@ public class SubCategoryService extends BaseService<SubCategory, Long> {
     }
 
     @Transactional
-    public SubCategory addProficient(long subCategoryId, long proficientId) {
+    public AddProficientToSubCatResult addProficient(long proficientId, long subCategoryId) {
         SubCategory subCategory = subCategoryRepository.getById(subCategoryId);
         Proficient proficient = proficientService.loadById(proficientId);
 
-        Set<Proficient> proficients = subCategory.getProficients();
-        proficients.add(proficient);
-        subCategory.setProficients(proficients);
+        subCategory.addProficient(proficient);
 
-        Set<SubCategory> subCategories = proficient.getSubCategories();
-        subCategories.add(subCategory);
-        proficient.setSubCategories(subCategories);
-
-        proficientService.update(proficient);
-        return super.update(subCategory);
+        SubCategory result = subCategoryRepository.save(subCategory);
+        return AddProficientToSubCatResult.builder()
+                .proficientId(proficientId)
+                .subCategoryId(result.getId())
+                .success(true)
+                .build();
     }
 
     @Transactional
-    public SubCategory removeProficient(long subCategoryId, long proficientId) {
+    public RemoveProficientFromSubCatResult removeProficient(long proficientId, long subCategoryId) {
         SubCategory subCategory = subCategoryRepository.getById(subCategoryId);
         Proficient proficient = proficientService.loadById(proficientId);
 
-        Set<Proficient> proficients = subCategory.getProficients();
-        proficients.remove(proficient);
-        subCategory.setProficients(proficients);
+        subCategory.removeProficient(proficient);
+        proficient.removeSubCategory(subCategory);
 
-        Set<SubCategory> subCategories = proficient.getSubCategories();
-        subCategories.remove(subCategory);
-        proficient.setSubCategories(subCategories);
+        SubCategory result = subCategoryRepository.save(subCategory);
+        return RemoveProficientFromSubCatResult.builder()
+                .proficientId(proficientId)
+                .subCategoryId(result.getId())
+                .success(true)
+                .build();
+    }
 
-        proficientService.update(proficient);
-        return super.update(subCategory);
+    public SubCategory loadById(long id) {
+        return subCategoryRepository.getById(id);
     }
 }

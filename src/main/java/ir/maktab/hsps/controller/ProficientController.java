@@ -1,9 +1,15 @@
 package ir.maktab.hsps.controller;
 
+import ir.maktab.hsps.api.address.AddressUpdateParam;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
+import ir.maktab.hsps.api.user.customer.CustomerModel;
+import ir.maktab.hsps.api.user.customer.CustomerUpdateParam;
+import ir.maktab.hsps.api.user.customer.CustomerUpdateResult;
 import ir.maktab.hsps.api.user.proficient.ProficientCreateParam;
 import ir.maktab.hsps.api.user.proficient.ProficientModel;
+import ir.maktab.hsps.api.user.proficient.ProficientUpdateParam;
+import ir.maktab.hsps.api.user.proficient.ProficientUpdateResult;
 import ir.maktab.hsps.service.ProficientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,5 +38,17 @@ public class ProficientController {
         changePasswordParam.setUserId(id);
         UserChangePasswordResult userChangePasswordResult = proficientService.changePassword(changePasswordParam);
         return ResponseEntity.ok(userChangePasswordResult);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProficientUpdateResult> update(@PathVariable long id, @RequestBody ProficientUpdateParam updateParam) {
+        updateParam.setId(id);
+        ProficientUpdateResult proficientUpdateResult = null;
+        try {
+            proficientUpdateResult = proficientService.updateProficient(updateParam);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(proficientUpdateResult);
     }
 }
