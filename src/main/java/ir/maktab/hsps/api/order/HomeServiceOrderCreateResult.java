@@ -1,4 +1,4 @@
-package ir.maktab.hsps.api.home_service_order;
+package ir.maktab.hsps.api.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

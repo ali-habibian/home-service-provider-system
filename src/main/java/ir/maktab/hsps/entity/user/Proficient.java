@@ -5,10 +5,7 @@ import ir.maktab.hsps.entity.Review;
 import ir.maktab.hsps.entity.Transaction;
 import ir.maktab.hsps.entity.category.SubCategory;
 import ir.maktab.hsps.exception.ResourceNotFoundException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -30,7 +27,11 @@ public class Proficient extends User {
     @CreationTimestamp
     private Instant registerDate;
 
+    @Builder.Default
     private Double credit = 0.0;
+
+    @Builder.Default
+    private Double ratingAvg = 0.0;
 
     //    @Lob
 //    private Blob profileImg;

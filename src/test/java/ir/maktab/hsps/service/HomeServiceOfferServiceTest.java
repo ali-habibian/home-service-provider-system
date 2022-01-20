@@ -1,5 +1,8 @@
 package ir.maktab.hsps.service;
 
+import ir.maktab.hsps.api.offer.HomeServiceOfferCreateParam;
+import ir.maktab.hsps.api.offer.HomeServiceOfferCreateResult;
+import ir.maktab.hsps.api.offer.HomeServiceOfferModel;
 import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.user.Proficient;
@@ -55,21 +58,25 @@ class HomeServiceOfferServiceTest {
 
     @Test
     void test_send_offer_isOk() {
-//        HomeServiceOffer homeServiceOffer = new HomeServiceOffer();
-//        homeServiceOffer.setProficient(proficientService.loadById(7L));
-//        homeServiceOffer.setSuggestedPrice(6000.0);
-//        homeServiceOffer.setWorkDuration("2 Days");
-//        homeServiceOffer.setHomeServiceOrder(homeServiceOrderService.loadById(4L));
-//
-//        HomeServiceOffer result = homeServiceOfferService.sendOffer(homeServiceOffer);
-//        assertNotNull(result);
+        HomeServiceOfferCreateParam createParam = HomeServiceOfferCreateParam.builder()
+                .proficientId(1)
+                .orderId(5)
+                .suggestedPrice(16500.0)
+                .workDuration("8 Hours")
+                .startTime("08:30 AM, Sat 01/22/2022")
+                .build();
+
+        HomeServiceOfferCreateResult homeServiceOfferCreateResult = homeServiceOfferService.sendOffer(createParam);
+        assertNotNull(homeServiceOfferCreateResult);
     }
 
     @Test
     void test_load_by_order_Id_isOk() {
-        List<HomeServiceOffer> homeServiceOffers = homeServiceOfferService.loadByOrderIdSortAsc(4);
-        homeServiceOffers.forEach(ho -> {
+        List<HomeServiceOfferModel> homeServiceOfferModels = homeServiceOfferService.loadByOrderIdSortAsc(4);
+        homeServiceOfferModels.forEach(ho -> {
             System.out.println(ho.getId() + ": " + ho.getSuggestedPrice());
         });
+
+        assertEquals(4, homeServiceOfferModels.size());
     }
 }

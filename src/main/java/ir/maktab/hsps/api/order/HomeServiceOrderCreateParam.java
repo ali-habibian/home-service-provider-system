@@ -1,7 +1,6 @@
-package ir.maktab.hsps.api.home_service_order;
+package ir.maktab.hsps.api.order;
 
 import ir.maktab.hsps.api.address.AddressCreateParam;
-import ir.maktab.hsps.api.address.AddressUpdateParam;
 import ir.maktab.hsps.entity.category.SubCategory;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.user.Customer;

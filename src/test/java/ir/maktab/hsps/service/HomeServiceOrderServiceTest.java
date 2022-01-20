@@ -1,19 +1,16 @@
 package ir.maktab.hsps.service;
 
 import ir.maktab.hsps.api.address.AddressCreateParam;
-import ir.maktab.hsps.api.address.AddressUpdateParam;
-import ir.maktab.hsps.api.home_service_order.HomeServiceOrderCreateParam;
-import ir.maktab.hsps.api.home_service_order.HomeServiceOrderCreateResult;
-import ir.maktab.hsps.entity.Address;
-import ir.maktab.hsps.entity.HomeServiceOffer;
-import ir.maktab.hsps.entity.category.SubCategory;
-import ir.maktab.hsps.entity.order.HomeServiceOrder;
-import ir.maktab.hsps.entity.user.Customer;
+import ir.maktab.hsps.api.order.HomeServiceOrderCreateParam;
+import ir.maktab.hsps.api.order.HomeServiceOrderCreateResult;
+import ir.maktab.hsps.api.order.OfferAcceptParam;
+import ir.maktab.hsps.api.order.OrderUpdateResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class HomeServiceOrderServiceTest {
@@ -26,7 +23,7 @@ class HomeServiceOrderServiceTest {
 
     @Test
     void test_saveHomeServiceOrder() {
-        AddressCreateParam  addressCreateParam = AddressCreateParam.builder()
+        AddressCreateParam addressCreateParam = AddressCreateParam.builder()
                 .province("Province-7")
                 .city("City-7")
                 .street("Street-7")
@@ -53,15 +50,12 @@ class HomeServiceOrderServiceTest {
 
     @Test
     void test_accept_offer_isOk() {
-        // TODO
-//        HomeServiceOrder homeServiceOrder = homeServiceOrderService.loadById(4L);
-//        HomeServiceOffer acceptedOffer = homeServiceOfferService.loadById(3L);
-//        homeServiceOrder.setAcceptedOffer(acceptedOffer);
-//        HomeServiceOrder result = homeServiceOrderService.acceptOffer(homeServiceOrder);
-//        assertNotNull(result);
-    }
+        OfferAcceptParam offerAcceptParam = new OfferAcceptParam();
+        offerAcceptParam.setOrderId(5);
+        offerAcceptParam.setAcceptedOfferId(6);
+//        offerAcceptParam.setHomeServiceOffer(homeServiceOfferService.loadById(6L));
 
-    @Test
-    void acceptOffer() {
+        OrderUpdateResult result = homeServiceOrderService.acceptOffer(offerAcceptParam);
+        assertTrue(result.isSuccess());
     }
 }

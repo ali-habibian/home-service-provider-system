@@ -1,9 +1,9 @@
 package ir.maktab.hsps.service;
 
-import ir.maktab.hsps.api.home_service_order.HomeServiceOrderCreateParam;
-import ir.maktab.hsps.api.home_service_order.HomeServiceOrderCreateResult;
-import ir.maktab.hsps.api.user.customer.CustomerModel;
-import ir.maktab.hsps.entity.HomeServiceOffer;
+import ir.maktab.hsps.api.order.HomeServiceOrderCreateParam;
+import ir.maktab.hsps.api.order.HomeServiceOrderCreateResult;
+import ir.maktab.hsps.api.order.OfferAcceptParam;
+import ir.maktab.hsps.api.order.OrderUpdateResult;
 import ir.maktab.hsps.entity.category.SubCategory;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.order.OrderStatus;
@@ -12,6 +12,8 @@ import ir.maktab.hsps.repository.HomeServiceOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -34,19 +36,37 @@ public class HomeServiceOrderService {
                 .build();
     }
 
-    public HomeServiceOrder update(HomeServiceOrder homeServiceOrder) {
-        return null;
+    @Transactional
+    public OrderUpdateResult acceptOffer(OfferAcceptParam offerAcceptParam) {
+        HomeServiceOrder homeServiceOrder = homeServiceOrderRepository.getById(offerAcceptParam.getOrderId());
+        homeServiceOrder.getHomeServiceOffers().forEach(o -> {
+            if (o.getId() == offerAcceptParam.getAcceptedOfferId()) {
+                homeServiceOrder.acceptOffer(o);
+                homeServiceOrder.setOrderStatus(OrderStatus.WAITING_FOR_PROFICIENT_TO_COME);
+            }
+        });
+
+        HomeServiceOrder result = homeServiceOrderRepository.save(homeServiceOrder);
+        return OrderUpdateResult.builder()
+                .id(result.getId())
+                .success(true)
+                .build();
     }
 
     @Transactional
-    public HomeServiceOrder acceptOffer(HomeServiceOrder homeServiceOrder) {
-        HomeServiceOffer acceptedOffer = homeServiceOrder.getAcceptedOffer();
+    public OrderUpdateResult finishOrder(long orderId) {
+        HomeServiceOrder homeServiceOrder = homeServiceOrderRepository.getById(orderId);
+        homeServiceOrder.setOrderStatus(OrderStatus.FINISHED);
+        homeServiceOrder.setOrderFinishedDate(Instant.now());
 
-        acceptedOffer.setIsAccepted(true);
+        HomeServiceOrder result = homeServiceOrderRepository.save(homeServiceOrder);
+        return OrderUpdateResult.builder()
+                .id(result.getId())
+                .success(true)
+                .build();
+    }
 
-        homeServiceOrder.setAcceptedOffer(acceptedOffer);
-        homeServiceOrder.setOrderStatus(OrderStatus.WAITING_FOR_PROFICIENT_TO_COME);
-
-        return homeServiceOrderRepository.save(homeServiceOrder);
+    public HomeServiceOrder loadById(long id) {
+        return homeServiceOrderRepository.getById(id);
     }
 }
