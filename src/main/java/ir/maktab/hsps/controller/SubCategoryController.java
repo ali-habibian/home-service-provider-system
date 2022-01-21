@@ -1,5 +1,6 @@
 package ir.maktab.hsps.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import ir.maktab.hsps.api.category.CategoryCreateResult;
 import ir.maktab.hsps.api.category.sub_category.AddProficientToSubCatResult;
 import ir.maktab.hsps.api.category.sub_category.RemoveProficientFromSubCatResult;
@@ -17,6 +18,7 @@ public class SubCategoryController {
 
     private final SubCategoryService subCategoryService;
 
+    @Operation(summary = "Create new subCategory")
     @PostMapping
     public ResponseEntity<CategoryCreateResult> createSubCategory(@RequestBody SubCategoryCreateParam createParam) {
         CategoryCreateResult categoryCreateResult = subCategoryService.saveSubCategory(createParam);

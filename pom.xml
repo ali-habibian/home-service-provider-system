@@ -71,18 +71,25 @@
             <version>1.8.13</version>
         </dependency>
 
+        <!--        Swagger-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
         <!--            For specification-->
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <version>5.0.0</version>
-            <classifier>jpa</classifier>
-        </dependency>
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <version>5.0.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.querydsl</groupId>-->
+<!--            <artifactId>querydsl-apt</artifactId>-->
+<!--            <version>5.0.0</version>-->
+<!--            <classifier>jpa</classifier>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.querydsl</groupId>-->
+<!--            <artifactId>querydsl-jpa</artifactId>-->
+<!--            <version>5.0.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -101,22 +108,22 @@
             </plugin>
 
             <!--            For specification-->
-            <plugin>
-                <groupId>com.mysema.maven</groupId>
-                <artifactId>maven-apt-plugin</artifactId>
-                <version>1.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>target/generated-sources</outputDirectory>
-                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>com.mysema.maven</groupId>-->
+<!--                <artifactId>maven-apt-plugin</artifactId>-->
+<!--                <version>1.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>process</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>target/generated-sources</outputDirectory>-->
+<!--                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
