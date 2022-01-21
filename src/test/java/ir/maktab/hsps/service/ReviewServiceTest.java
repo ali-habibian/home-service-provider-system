@@ -1,5 +1,7 @@
 package ir.maktab.hsps.service;
 
+import ir.maktab.hsps.api.review.ReviewCreateParam;
+import ir.maktab.hsps.api.review.ReviewCreateResult;
 import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.Review;
 import ir.maktab.hsps.entity.user.Customer;
@@ -15,25 +17,18 @@ class ReviewServiceTest {
 
     @Autowired
     private ReviewService reviewService;
-    @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private HomeServiceOfferService homeServiceOfferService;
 
-//    @Test
-//    void test_save() {
-//        Review review = new Review();
-//        HomeServiceOffer homeServiceOffer = homeServiceOfferService.loadById(2L);
-//        Proficient proficient = homeServiceOffer.getProficient();
-//        Customer customer = customerService.loadById(1L);
-//
-//        review.setComment("Comment-1");
-//        review.setRating(5);
-//        review.setCustomer(customer);
-//        review.setHomeServiceOffer(homeServiceOffer);
-//        review.setProficient(proficient);
-//
-//        Review result = reviewService.save(review);
-//        assertNotNull(result);
-//    }
+
+    @Test
+    void test_save() {
+        ReviewCreateParam createParam = ReviewCreateParam.builder()
+                .comment("review 2")
+                .rating(2)
+                .customerId(2)
+                .homeServiceOrderId(6)
+                .build();
+
+        ReviewCreateResult result = reviewService.save(createParam);
+        assertNotNull(result);
+    }
 }

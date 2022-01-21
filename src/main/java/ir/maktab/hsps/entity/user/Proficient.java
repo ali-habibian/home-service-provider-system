@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -69,6 +70,10 @@ public class Proficient extends User {
             reviews = new HashSet<>();
         }
         reviews.add(review);
+        double ratingSum = reviews.stream().mapToDouble(Review::getRating).sum();
+
+        DecimalFormat df = new DecimalFormat("0.00");
+        ratingAvg = Double.parseDouble(df.format(ratingSum / reviews.size()));
         review.setProficient(this);
     }
 

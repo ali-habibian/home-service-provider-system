@@ -21,19 +21,21 @@ public class ProficientModel {
     private String email;
     private String password;
     private Double credit;
+    private Double ratingAvg;
     private UserStatus proficientStatus;
     private UserRole userRole;
     private Instant registerDate;
     private String profileImg;
 
     public ProficientModel convertProficient2Model(Proficient proficient) {
-                return ProficientModel.builder()
+        return ProficientModel.builder()
                 .id(proficient.getId())
                 .firstName(proficient.getFirstName())
                 .lastName(proficient.getLastName())
                 .email(proficient.getEmail())
                 .password(proficient.getPassword())
                 .credit(proficient.getCredit())
+                .ratingAvg(proficient.getRatingAvg())
                 .proficientStatus(proficient.getProficientStatus())
                 .userRole(proficient.getUserRole())
                 .registerDate(proficient.getRegisterDate())
