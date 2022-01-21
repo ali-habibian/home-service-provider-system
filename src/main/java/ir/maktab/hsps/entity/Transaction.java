@@ -3,15 +3,15 @@ package ir.maktab.hsps.entity;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.Proficient;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
 
-@Data
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -26,10 +26,12 @@ public class Transaction {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Customer customer;
 
+    private String customerCreditCardNumber;
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Proficient proficient;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private HomeServiceOrder homeServiceOrder;
 
     @OneToOne
