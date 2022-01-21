@@ -45,6 +45,8 @@ public class TransactionService {
 
     @Transactional
     public TransactionCreateResult payWithCredit(TransactionCreateParam createParam) {
+        createParam.setCustomerCreditCardNumber("Credit");
+
         Customer customer = customerService.loadById(createParam.getCustomerId());
 
         HomeServiceOrder homeServiceOrder = customer.getHomeServiceOrders().stream()
