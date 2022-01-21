@@ -3,5 +3,8 @@ package ir.maktab.hsps.repository;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface HomeServiceOrderRepository extends JpaRepository<HomeServiceOrder, Long> {
+    List<HomeServiceOrder> findAllByCustomer_Id(long customerId);
 }

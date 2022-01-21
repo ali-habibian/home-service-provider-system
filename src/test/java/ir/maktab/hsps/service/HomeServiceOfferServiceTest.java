@@ -3,6 +3,7 @@ package ir.maktab.hsps.service;
 import ir.maktab.hsps.api.offer.HomeServiceOfferCreateParam;
 import ir.maktab.hsps.api.offer.HomeServiceOfferCreateResult;
 import ir.maktab.hsps.api.offer.HomeServiceOfferModel;
+import ir.maktab.hsps.api.order.HomeServiceOrderModel;
 import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.user.Proficient;
@@ -20,12 +21,6 @@ class HomeServiceOfferServiceTest {
 
     @Autowired
     private HomeServiceOfferService homeServiceOfferService;
-
-    @Autowired
-    private HomeServiceOrderService homeServiceOrderService;
-
-    @Autowired
-    private ProficientService proficientService;
 
     @Test
     void test_save() {
@@ -78,5 +73,11 @@ class HomeServiceOfferServiceTest {
         });
 
         assertEquals(4, homeServiceOfferModels.size());
+    }
+
+    @Test
+    void test_findAllByProficientId_isOk() {
+        List<HomeServiceOfferModel> result = homeServiceOfferService.loadByProficientId(9);
+        assertEquals(2, result.size());
     }
 }

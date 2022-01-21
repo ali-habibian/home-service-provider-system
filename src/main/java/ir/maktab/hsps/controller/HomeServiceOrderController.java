@@ -1,9 +1,6 @@
 package ir.maktab.hsps.controller;
 
-import ir.maktab.hsps.api.order.HomeServiceOrderCreateParam;
-import ir.maktab.hsps.api.order.HomeServiceOrderCreateResult;
-import ir.maktab.hsps.api.order.OfferAcceptParam;
-import ir.maktab.hsps.api.order.OrderUpdateResult;
+import ir.maktab.hsps.api.order.*;
 import ir.maktab.hsps.service.HomeServiceOfferService;
 import ir.maktab.hsps.service.HomeServiceOrderService;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +8,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders")
 public class HomeServiceOrderController {
 
     private final HomeServiceOrderService orderService;
+
+    //    http://localhost:8080/orders/filter?customerId={customerId}
+    @GetMapping("/filter")
+    public ResponseEntity<List<HomeServiceOrderModel>> getAllByCustomerId(@RequestParam long customerId){
+        List<HomeServiceOrderModel> result = orderService.findAllByCustomerId(customerId);
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping
     public ResponseEntity<HomeServiceOrderCreateResult> addOrder(@RequestBody HomeServiceOrderCreateParam createParam) {

@@ -1,16 +1,14 @@
 package ir.maktab.hsps.service;
 
 import ir.maktab.hsps.api.address.AddressCreateParam;
-import ir.maktab.hsps.api.order.HomeServiceOrderCreateParam;
-import ir.maktab.hsps.api.order.HomeServiceOrderCreateResult;
-import ir.maktab.hsps.api.order.OfferAcceptParam;
-import ir.maktab.hsps.api.order.OrderUpdateResult;
+import ir.maktab.hsps.api.order.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class HomeServiceOrderServiceTest {
@@ -53,9 +51,14 @@ class HomeServiceOrderServiceTest {
         OfferAcceptParam offerAcceptParam = new OfferAcceptParam();
         offerAcceptParam.setOrderId(5);
         offerAcceptParam.setAcceptedOfferId(6);
-//        offerAcceptParam.setHomeServiceOffer(homeServiceOfferService.loadById(6L));
 
         OrderUpdateResult result = homeServiceOrderService.acceptOffer(offerAcceptParam);
         assertTrue(result.isSuccess());
+    }
+
+    @Test
+    void test_findAllByCustomerId_isOk() {
+        List<HomeServiceOrderModel> result = homeServiceOrderService.findAllByCustomerId(5);
+        assertEquals(2, result.size());
     }
 }

@@ -1,9 +1,6 @@
 package ir.maktab.hsps.service;
 
-import ir.maktab.hsps.api.order.HomeServiceOrderCreateParam;
-import ir.maktab.hsps.api.order.HomeServiceOrderCreateResult;
-import ir.maktab.hsps.api.order.OfferAcceptParam;
-import ir.maktab.hsps.api.order.OrderUpdateResult;
+import ir.maktab.hsps.api.order.*;
 import ir.maktab.hsps.entity.category.SubCategory;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.order.OrderStatus;
@@ -14,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -68,5 +67,12 @@ public class HomeServiceOrderService {
 
     public HomeServiceOrder loadById(long id) {
         return homeServiceOrderRepository.getById(id);
+    }
+
+    public List<HomeServiceOrderModel> findAllByCustomerId(long customerId) {
+        List<HomeServiceOrder> orders = homeServiceOrderRepository.findAllByCustomer_Id(customerId);
+        List<HomeServiceOrderModel> orderModels = new ArrayList<>();
+        orders.forEach(o -> orderModels.add(new HomeServiceOrderModel().convertOrder2Model(o)));
+        return orderModels;
     }
 }

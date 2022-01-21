@@ -9,6 +9,8 @@ import java.util.List;
 public interface HomeServiceOfferRepository extends JpaRepository<HomeServiceOffer, Long> {
     List<HomeServiceOffer> findAllByHomeServiceOrder_IdOrderBySuggestedPriceAsc(long orderId);
 
+    List<HomeServiceOffer> findAllByProficient_Id(long proficientId);
+
     @Override
     List<HomeServiceOffer> findAll(Sort sort);
 }

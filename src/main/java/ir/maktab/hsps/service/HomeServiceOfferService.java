@@ -72,4 +72,12 @@ public class HomeServiceOfferService extends BaseService<HomeServiceOffer, Long>
         homeServiceOffers.forEach(o -> homeServiceOfferModels.add(new HomeServiceOfferModel().convertOffer2Model(o)));
         return homeServiceOfferModels;
     }
+
+    public List<HomeServiceOfferModel> loadByProficientId(long proficientId) {
+        List<HomeServiceOffer> homeServiceOffers = homeServiceOfferRepository.findAllByProficient_Id(proficientId);
+
+        List<HomeServiceOfferModel> homeServiceOfferModels = new ArrayList<>();
+        homeServiceOffers.forEach(o -> homeServiceOfferModels.add(new HomeServiceOfferModel().convertOffer2Model(o)));
+        return homeServiceOfferModels;
+    }
 }

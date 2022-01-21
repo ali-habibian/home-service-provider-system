@@ -3,6 +3,7 @@ package ir.maktab.hsps.controller;
 import ir.maktab.hsps.api.offer.HomeServiceOfferCreateParam;
 import ir.maktab.hsps.api.offer.HomeServiceOfferCreateResult;
 import ir.maktab.hsps.api.offer.HomeServiceOfferModel;
+import ir.maktab.hsps.api.order.HomeServiceOrderModel;
 import ir.maktab.hsps.service.HomeServiceOfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,13 @@ public class HomeServiceOfferController {
     public ResponseEntity<List<HomeServiceOfferModel>> getByOrderIdAsc(@RequestParam long orderId) {
         List<HomeServiceOfferModel> homeServiceOfferModels = offerService.loadByOrderIdSortAsc(orderId);
         return ResponseEntity.ok(homeServiceOfferModels);
+    }
+
+    //    http://localhost:8080/orders/filterByProficientId?proficientId={proficientId}
+    @GetMapping("/filterByProficientId")
+    public ResponseEntity<List<HomeServiceOfferModel>> getAllByProficientId(@RequestParam long proficientId) {
+        List<HomeServiceOfferModel> result = offerService.loadByProficientId(proficientId);
+        return ResponseEntity.ok(result);
     }
 
 }
