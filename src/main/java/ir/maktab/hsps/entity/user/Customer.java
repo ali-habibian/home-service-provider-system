@@ -28,8 +28,8 @@ public class Customer extends User {
     @Column(nullable = false)
     private Double credit = 0.0;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Address address;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    private Address address;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<HomeServiceOrder> homeServiceOrders;

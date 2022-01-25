@@ -64,6 +64,4 @@ public class AdminService extends BaseService<Admin, Long> {
     public Admin loadByEmail(String email) {
         return adminRepository.findByEmail(email);
     }
-
-
 }

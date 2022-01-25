@@ -4,13 +4,13 @@ import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
 import ir.maktab.hsps.api.user.proficient.*;
 import ir.maktab.hsps.entity.user.Proficient;
-import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.exception.EmailException;
 import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.ProficientRepository;
 import ir.maktab.hsps.util.Utility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +18,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+import static ir.maktab.hsps.security.ApplicationUserRole.PROFICIENT;
+
 @Service
 @RequiredArgsConstructor
 public class ProficientService {
     private final ProficientRepository proficientRepository;
     private final Utility utility;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public ProficientModel save(ProficientCreateParam createParam) throws IOException {
         Proficient proficient = createParam.convert2Proficient();
@@ -34,8 +37,10 @@ public class ProficientService {
         if (utility.passwordIsNotValid(proficient.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
+
+        proficient.setPassword(bCryptPasswordEncoder.encode(createParam.getPassword()));
         proficient.setProficientStatus(UserStatus.NEW);
-        proficient.setUserRole(UserRole.PROFICIENT);
+        proficient.setApplicationUserRole(PROFICIENT);
         proficient.setCredit(0.0);
         Proficient saveResult = proficientRepository.save(proficient);
         return new ProficientModel().convertProficient2Model(saveResult);
@@ -67,7 +72,7 @@ public class ProficientService {
             throw new EmailException("Another proficient with this email already exists");
         }
 
-        proficient.setUserRole(UserRole.PROFICIENT);
+        proficient.setApplicationUserRole(PROFICIENT);
         proficient.setProficientStatus(UserStatus.AWAITING_APPROVAL);
         Proficient result = proficientRepository.save(proficient);
 

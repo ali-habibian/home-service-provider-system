@@ -1,20 +1,16 @@
 package ir.maktab.hsps.controller;
 
-import ir.maktab.hsps.api.address.AddressUpdateParam;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
-import ir.maktab.hsps.api.user.customer.CustomerModel;
-import ir.maktab.hsps.api.user.customer.CustomerUpdateParam;
-import ir.maktab.hsps.api.user.customer.CustomerUpdateResult;
 import ir.maktab.hsps.api.user.proficient.ProficientCreateParam;
 import ir.maktab.hsps.api.user.proficient.ProficientModel;
 import ir.maktab.hsps.api.user.proficient.ProficientUpdateParam;
 import ir.maktab.hsps.api.user.proficient.ProficientUpdateResult;
 import ir.maktab.hsps.service.ProficientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -33,6 +29,8 @@ public class ProficientController {
     }
 
     @PutMapping("/{id}/password")
+    //    @PreAuthorize("hasAnyRole('ROLE_PROFICIENT')")
+    @PreAuthorize("hasRole('ROLE_PROFICIENT')")
     public ResponseEntity<UserChangePasswordResult> changePassword(@RequestBody UserChangePasswordParam changePasswordParam,
                                                                    @PathVariable Long id) {
         changePasswordParam.setUserId(id);
@@ -41,6 +39,7 @@ public class ProficientController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_PROFICIENT')")
     public ResponseEntity<ProficientUpdateResult> update(@PathVariable long id, @RequestBody ProficientUpdateParam updateParam) {
         updateParam.setId(id);
         ProficientUpdateResult proficientUpdateResult = null;

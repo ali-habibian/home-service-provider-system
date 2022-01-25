@@ -1,9 +1,11 @@
 package ir.maktab.hsps.entity.user;
 
+import ir.maktab.hsps.security.ApplicationUserRole;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -11,7 +13,8 @@ import javax.persistence.*;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,23 +33,18 @@ public class User {
     private String password; // Minimum size:8, combination of letters and numbers
 
     @Column(nullable = false)
-    private UserRole userRole;
+    private ApplicationUserRole applicationUserRole;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         User user = (User) o;
-
-        if (!id.equals(user.id)) return false;
-        return userRole == user.userRole;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + userRole.hashCode();
-        return result;
+        return Objects.hash(id, email);
     }
 }

@@ -8,6 +8,7 @@ import ir.maktab.hsps.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +25,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}/password")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public ResponseEntity<UserChangePasswordResult> changePassword(@RequestBody UserChangePasswordParam changePasswordParam,
                                                                    @PathVariable Long id) {
         changePasswordParam.setUserId(id);
@@ -32,13 +34,14 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public ResponseEntity<CustomerUpdateResult> update(@PathVariable long id, @RequestBody CustomerUpdateParam updateParam) {
 
-        CustomerModel customerModel = customerService.loadByIdReturnModel(id);
-        Long addressId = customerModel.getAddressModel().getId();
-        AddressUpdateParam address = updateParam.getAddress();
-        address.setId(addressId);
-        updateParam.setAddress(address);
+//        CustomerModel customerModel = customerService.loadByIdReturnModel(id);
+//        Long addressId = customerModel.getAddressModel().getId();
+//        AddressUpdateParam address = updateParam.getAddress();
+//        address.setId(addressId);
+//        updateParam.setAddress(address);
 
         updateParam.setId(id);
 

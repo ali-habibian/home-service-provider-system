@@ -8,6 +8,7 @@ import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.exception.CreditException;
 import ir.maktab.hsps.exception.PasswordException;
+import ir.maktab.hsps.security.ApplicationUserRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +27,7 @@ class CustomerServiceTest {
                 .lastName("Last-Customer-9")
                 .email("Email-Customer-9@mail.com")
                 .password("12345678asd")
-                .userRole(UserRole.CUSTOMER)
+//                .userRole(ApplicationUserRole.CUSTOMER)
                 .build();
 
         CustomerCreateResult result = customerService.saveCustomer(createParam);

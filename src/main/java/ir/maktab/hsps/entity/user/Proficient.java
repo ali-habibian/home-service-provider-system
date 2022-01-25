@@ -34,13 +34,6 @@ public class Proficient extends User {
     @Builder.Default
     private Double ratingAvg = 0.0;
 
-    //    @Lob
-//    private Blob profileImg;
-//    private String profileImgUrl; // Max size: 300 KB
-
-//    @Lob
-//    private byte[] profileImage;
-
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private String profileImage;

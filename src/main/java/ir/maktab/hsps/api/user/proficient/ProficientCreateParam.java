@@ -2,6 +2,7 @@ package ir.maktab.hsps.api.user.proficient;
 
 import ir.maktab.hsps.entity.user.Proficient;
 import ir.maktab.hsps.entity.user.UserRole;
+import ir.maktab.hsps.security.ApplicationUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class ProficientCreateParam {
     private String lastName;
     private String email;
     private String password;
-    private UserRole userRole;
+//    private ApplicationUserRole userRole;
     private MultipartFile profileImgFile;
 
     public Proficient convert2Proficient() throws IOException {
@@ -36,7 +37,7 @@ public class ProficientCreateParam {
                 .lastName(this.lastName)
                 .email(this.email)
                 .password(this.password)
-                .userRole(this.userRole)
+//                .applicationUserRole(this.userRole)
                 .profileImage(Base64.getEncoder().encodeToString(profileImgFile.getBytes()))
                 .build();
     }

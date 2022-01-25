@@ -1,6 +1,5 @@
 package ir.maktab.hsps.api.user.customer;
 
-import ir.maktab.hsps.api.address.AddressUpdateParam;
 import ir.maktab.hsps.entity.user.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +16,7 @@ public class CustomerUpdateParam {
     private String lastName;
     private String email;
     private String currentPassword;
-    private AddressUpdateParam address;
+//    private AddressUpdateParam address;
 
     public Customer convert2Customer() {
         return Customer.builder()
@@ -26,7 +25,7 @@ public class CustomerUpdateParam {
                 .lastName(this.lastName)
                 .email(this.email)
                 .password(this.currentPassword)
-                .address(address.convert2Address())
+//                .address(address.convert2Address())
                 .build();
     }
 }

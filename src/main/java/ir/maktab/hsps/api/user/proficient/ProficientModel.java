@@ -3,6 +3,7 @@ package ir.maktab.hsps.api.user.proficient;
 import ir.maktab.hsps.entity.user.Proficient;
 import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.entity.user.UserStatus;
+import ir.maktab.hsps.security.ApplicationUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class ProficientModel {
     private Double credit;
     private Double ratingAvg;
     private UserStatus proficientStatus;
-    private UserRole userRole;
+    private ApplicationUserRole userRole;
     private Instant registerDate;
     private String profileImg;
 
@@ -37,7 +38,7 @@ public class ProficientModel {
                 .credit(proficient.getCredit())
                 .ratingAvg(proficient.getRatingAvg())
                 .proficientStatus(proficient.getProficientStatus())
-                .userRole(proficient.getUserRole())
+                .userRole(proficient.getApplicationUserRole())
                 .registerDate(proficient.getRegisterDate())
                 .profileImg(proficient.getProfileImage())
                 .build();

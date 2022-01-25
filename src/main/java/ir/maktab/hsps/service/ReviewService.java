@@ -30,7 +30,7 @@ public class ReviewService {
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("HomeServiceOrder", "id", createParam.getHomeServiceOrderId()));
 
-        if (homeServiceOrder.getOrderStatus() != OrderStatus.FINISHED){
+        if (OrderStatus.FINISHED != homeServiceOrder.getOrderStatus()){
             throw new ReviewException("Reviews are only sent for orders with finished status");
         }
 

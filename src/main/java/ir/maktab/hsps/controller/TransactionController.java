@@ -24,7 +24,7 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionCreateResult);
     }
 
-    @PostMapping("/online")
+    @PostMapping("/credit")
     public ResponseEntity<TransactionCreateResult> payWithCredit(@RequestBody TransactionCreateParam createParam) {
         TransactionCreateResult transactionCreateResult = transactionService.payWithCredit(createParam);
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionCreateResult);

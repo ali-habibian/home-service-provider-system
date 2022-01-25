@@ -4,6 +4,7 @@ import ir.maktab.hsps.api.address.AddressModel;
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.entity.user.UserStatus;
+import ir.maktab.hsps.security.ApplicationUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,9 +24,9 @@ public class CustomerModel {
     private String password;
     private Double credit;
     private UserStatus customerStatus;
-    private UserRole userRole;
+    private ApplicationUserRole userRole;
     private Instant registerDate;
-    private AddressModel addressModel;
+//    private AddressModel addressModel;
 
     public CustomerModel convertCustomer2Model(Customer customer) {
         return CustomerModel.builder()
@@ -36,9 +37,9 @@ public class CustomerModel {
                 .password(customer.getPassword())
                 .credit(customer.getCredit())
                 .customerStatus(customer.getCustomerStatus())
-                .userRole(customer.getUserRole())
+                .userRole(customer.getApplicationUserRole())
                 .registerDate(customer.getRegisterDate())
-                .addressModel(new AddressModel().convertAddress2Model(customer.getAddress()))
+//                .addressModel(new AddressModel().convertAddress2Model(customer.getAddress()))
                 .build();
     }
 }

@@ -7,6 +7,7 @@ import ir.maktab.hsps.api.user.proficient.ProficientModel;
 import ir.maktab.hsps.entity.user.Proficient;
 import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.exception.PasswordException;
+import ir.maktab.hsps.security.ApplicationUserRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +34,7 @@ class ProficientServiceTest {
                 .lastName("Last-Proficient-9")
                 .email("Email-Proficient-9@mail.com")
                 .password("12345678asd")
-                .userRole(UserRole.PROFICIENT)
+//                .userRole(ApplicationUserRole.PROFICIENT)
                 .build();
 
         ProficientModel result = proficientService.save(createParam);

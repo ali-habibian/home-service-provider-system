@@ -3,6 +3,7 @@ package ir.maktab.hsps.api.user.customer;
 import ir.maktab.hsps.api.address.AddressCreateParam;
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.UserRole;
+import ir.maktab.hsps.security.ApplicationUserRole;
 import lombok.*;
 
 @Data
@@ -15,8 +16,8 @@ public class CustomerCreateParam {
     private String lastName;
     private String email;
     private String password;
-    private UserRole userRole;
-    private AddressCreateParam address;
+//    private ApplicationUserRole userRole;
+//    private AddressCreateParam address;
 
     public Customer convert2Customer() {
         return Customer.builder()
@@ -24,8 +25,8 @@ public class CustomerCreateParam {
                 .lastName(this.lastName)
                 .email(this.email)
                 .password(this.password)
-                .userRole(this.userRole)
-                .address(address.convert2Address())
+//                .applicationUserRole(this.userRole)
+//                .address(address.convert2Address())
                 .build();
     }
 }
