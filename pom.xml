@@ -107,6 +107,12 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+
+<!--        Email sending-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
         <!--            For specification-->
         <!--        <dependency>-->
         <!--            <groupId>com.querydsl</groupId>-->

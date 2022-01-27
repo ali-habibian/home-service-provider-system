@@ -1,4 +1,4 @@
-package ir.maktab.hsps.auth;
+package ir.maktab.hsps.security.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

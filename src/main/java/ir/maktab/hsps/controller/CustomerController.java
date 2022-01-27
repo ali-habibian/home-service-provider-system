@@ -1,9 +1,11 @@
 package ir.maktab.hsps.controller;
 
-import ir.maktab.hsps.api.address.AddressUpdateParam;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
-import ir.maktab.hsps.api.user.customer.*;
+import ir.maktab.hsps.api.user.customer.CustomerCreateParam;
+import ir.maktab.hsps.api.user.customer.CustomerCreateResult;
+import ir.maktab.hsps.api.user.customer.CustomerUpdateParam;
+import ir.maktab.hsps.api.user.customer.CustomerUpdateResult;
 import ir.maktab.hsps.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,5 +49,11 @@ public class CustomerController {
 
         CustomerUpdateResult customerUpdateResult = customerService.update(updateParam);
         return ResponseEntity.ok(customerUpdateResult);
+    }
+
+    //    http://localhost:8080/customers/confirm?token=3ceaa13f-c507-4c78-9c9c-e37822689caa
+    @GetMapping(path = {"confirm"})
+    public String confirm(@RequestParam("token") String token) {
+        return customerService.confirmToken(token);
     }
 }

@@ -35,6 +35,20 @@ public class User {
     @Column(nullable = false)
     private ApplicationUserRole applicationUserRole;
 
+    @Builder.Default
+    private Boolean locked = false;
+
+    @Builder.Default
+    private Boolean enabled = false;
+
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

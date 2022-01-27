@@ -1,7 +1,4 @@
-package ir.maktab.hsps.auth;
-
-import ir.maktab.hsps.entity.user.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+package ir.maktab.hsps.security.auth;
 
 import java.util.Optional;
 

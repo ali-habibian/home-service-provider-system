@@ -3,19 +3,23 @@ package ir.maktab.hsps.service;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
 import ir.maktab.hsps.api.user.customer.*;
+import ir.maktab.hsps.entity.ConfirmationToken;
 import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.exception.EmailException;
 import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.CustomerRepository;
+import ir.maktab.hsps.security.email.EmailSender;
 import ir.maktab.hsps.util.Utility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static ir.maktab.hsps.security.ApplicationUserRole.CUSTOMER;
 
@@ -25,23 +29,42 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final Utility utility;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final EmailValidatorService emailValidatorService;
+    private final ConfirmationTokenService confirmationTokenService;
+    private final EmailSender emailSender;
 
     public CustomerCreateResult saveCustomer(CustomerCreateParam createParam) {
-        Customer customer = createParam.convert2Customer();
-        Customer loadByEmail = loadByEmail(customer.getEmail());
+
+        boolean isValidEmail = emailValidatorService.test(createParam.getEmail());
+
+        if (!isValidEmail) {
+            throw new EmailException(String.format("Email: %s, is not valid", createParam.getEmail()));
+        }
+
+        Customer loadByEmail = loadByEmail(createParam.getEmail());
         if (loadByEmail != null) {
             throw new EmailException("Another customer with this email already exists");
         }
 
-        if (utility.passwordIsNotValid(customer.getPassword())) {
+        if (utility.passwordIsNotValid(createParam.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
 
+        Customer customer = createParam.convert2Customer();
         customer.setPassword(bCryptPasswordEncoder.encode(createParam.getPassword()));
         customer.setApplicationUserRole(CUSTOMER);
         customer.setCustomerStatus(UserStatus.NEW);
         customer.setCredit(0.0);
+
         Customer saveResult = customerRepository.save(customer);
+
+        String token = utility.createRandomToken();
+        ConfirmationToken confirmationToken = utility.createConfirmationToken(saveResult, token);
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        String link = "http://localhost:8080/customers/confirm?token=" + token;
+        emailSender.send(createParam.getEmail(), utility.buildEmail(createParam.getFirstName(), link));
+
         return new CustomerCreateResult(saveResult.getId());
     }
 
@@ -135,5 +158,31 @@ public class CustomerService {
 
     private Customer loadByEmail(String email) {
         return customerRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public String confirmToken(String token) {
+        ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
+                .orElseThrow(() -> new IllegalStateException("Token not found"));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("Email already confirmed");
+        }
+
+        LocalDateTime expiresAt = confirmationToken.getExpiresAt();
+        if (expiresAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("Token is expired");
+        }
+
+        confirmationTokenService.setConfirmedAt(token);
+        enableUser(confirmationToken.getUser().getEmail());
+
+        return String.format("Email: %s confirmed", confirmationToken.getUser().getEmail());
+    }
+
+    private void enableUser(String email) {
+        Customer user = customerRepository.findByEmail(email);
+        user.setEnabled(true);
+        customerRepository.save(user);
     }
 }

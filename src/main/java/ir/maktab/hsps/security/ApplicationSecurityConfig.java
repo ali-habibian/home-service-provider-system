@@ -1,9 +1,9 @@
 package ir.maktab.hsps.security;
 
-import ir.maktab.hsps.auth.ApplicationUserService;
-import ir.maktab.hsps.jwt.JwtConfig;
-import ir.maktab.hsps.jwt.JwtTokenVerifierFilter;
-import ir.maktab.hsps.jwt.JwtUsernameAndPasswordAuthenticationFilter;
+import ir.maktab.hsps.security.auth.ApplicationUserService;
+import ir.maktab.hsps.security.jwt.JwtConfig;
+import ir.maktab.hsps.security.jwt.JwtTokenVerifierFilter;
+import ir.maktab.hsps.security.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +36,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/customers", "/proficients").permitAll()
+                .antMatchers(HttpMethod.GET, "/customers/confirm", "/proficients/confirm").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))

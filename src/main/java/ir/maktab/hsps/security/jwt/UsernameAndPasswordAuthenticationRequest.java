@@ -1,4 +1,4 @@
-package ir.maktab.hsps.jwt;
+package ir.maktab.hsps.security.jwt;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

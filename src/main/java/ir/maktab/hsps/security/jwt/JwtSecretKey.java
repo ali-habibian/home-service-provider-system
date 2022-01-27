@@ -1,4 +1,4 @@
-package ir.maktab.hsps.jwt;
+package ir.maktab.hsps.security.jwt;
 
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;

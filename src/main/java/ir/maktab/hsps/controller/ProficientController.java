@@ -50,4 +50,10 @@ public class ProficientController {
         }
         return ResponseEntity.ok(proficientUpdateResult);
     }
+
+    //    http://localhost:8080/proficients/confirm?token=3ceaa13f-c507-4c78-9c9c-e37822689caa
+    @GetMapping(path = {"confirm"})
+    public String confirm(@RequestParam("token") String token) {
+        return proficientService.confirmToken(token);
+    }
 }

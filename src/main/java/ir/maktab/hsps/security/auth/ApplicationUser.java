@@ -1,4 +1,4 @@
-package ir.maktab.hsps.auth;
+package ir.maktab.hsps.security.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +10,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ApplicationUser implements UserDetails {
 
+    private final Long id;
     private final Set<? extends GrantedAuthority> grantedAuthorities;
     private final String password;
     private final String username;

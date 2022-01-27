@@ -1,4 +1,4 @@
-package ir.maktab.hsps.jwt;
+package ir.maktab.hsps.security.jwt;
 
 import com.google.common.net.HttpHeaders;
 import io.jsonwebtoken.security.Keys;
