@@ -1,5 +1,6 @@
 package ir.maktab.hsps.service;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
 import ir.maktab.hsps.api.user.proficient.*;
@@ -203,5 +204,9 @@ public class ProficientService {
         Proficient user = proficientRepository.findByEmail(email);
         user.setEnabled(true);
         proficientRepository.save(user);
+    }
+
+    public Iterable<Proficient> findAll(BooleanExpression exp) {
+        return proficientRepository.findAll(exp);
     }
 }

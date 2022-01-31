@@ -113,18 +113,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-        <!--            For specification-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.querydsl</groupId>-->
-        <!--            <artifactId>querydsl-apt</artifactId>-->
-        <!--            <version>5.0.0</version>-->
-        <!--            <classifier>jpa</classifier>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.querydsl</groupId>-->
-        <!--            <artifactId>querydsl-jpa</artifactId>-->
-        <!--            <version>5.0.0</version>-->
-        <!--        </dependency>-->
+
+        <!--        QueryDsl-->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -142,23 +140,23 @@
                 </configuration>
             </plugin>
 
-            <!--            For specification-->
-            <!--            <plugin>-->
-            <!--                <groupId>com.mysema.maven</groupId>-->
-            <!--                <artifactId>maven-apt-plugin</artifactId>-->
-            <!--                <version>1.0</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>process</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <outputDirectory>target/generated-sources</outputDirectory>-->
-            <!--                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
+            <!--            QueryDsl-->
+            <plugin>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>maven-apt-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

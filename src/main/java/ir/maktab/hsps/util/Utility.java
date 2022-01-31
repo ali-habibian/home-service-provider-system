@@ -4,13 +4,30 @@ import ir.maktab.hsps.entity.ConfirmationToken;
 import ir.maktab.hsps.entity.user.User;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
 public class Utility {
+    public Instant convertStringDateToInstant(String stringDate) {
+        final DateTimeFormatter FMT = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy_MM_dd")
+                .parseDefaulting(ChronoField.NANO_OF_DAY, 0)
+                .toFormatter()
+                .withZone(ZoneId.of("America/Toronto"));
+        return FMT.parse(stringDate, Instant::from);
+    }
+
     public boolean passwordIsNotValid(String password) {
         if (password == null) {
             return true;
@@ -22,7 +39,7 @@ public class Utility {
         return !matcher.matches();
     }
 
-    public ConfirmationToken createConfirmationToken(User user, String token){
+    public ConfirmationToken createConfirmationToken(User user, String token) {
 
         return ConfirmationToken.builder()
                 .token(token)
@@ -32,7 +49,7 @@ public class Utility {
                 .build();
     }
 
-    public String createRandomToken(){
+    public String createRandomToken() {
         return UUID.randomUUID().toString();
     }
 

@@ -1,17 +1,23 @@
 package ir.maktab.hsps.controller;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
 import ir.maktab.hsps.api.user.customer.CustomerCreateParam;
 import ir.maktab.hsps.api.user.customer.CustomerCreateResult;
 import ir.maktab.hsps.api.user.customer.CustomerUpdateParam;
 import ir.maktab.hsps.api.user.customer.CustomerUpdateResult;
+import ir.maktab.hsps.entity.user.Customer;
+import ir.maktab.hsps.querydsl.customer.CustomerPredicatesBuilder;
 import ir.maktab.hsps.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,4 +62,21 @@ public class CustomerController {
     public String confirm(@RequestParam("token") String token) {
         return customerService.confirmToken(token);
     }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    public Iterable<Customer> findAllByQuerydsl(@RequestParam(value = "search") String search) {
+        System.out.println("search = " + search);
+        CustomerPredicatesBuilder builder = new CustomerPredicatesBuilder();
+        if (search != null) {
+            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+            Matcher matcher = pattern.matcher(search + ",");
+            while (matcher.find()) {
+                builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+            }
+        }
+        BooleanExpression exp = builder.build();
+        return customerService.findAll(exp);
+    }
+
 }

@@ -4,6 +4,7 @@ import ir.maktab.hsps.entity.user.Admin;
 import ir.maktab.hsps.exception.EmailException;
 import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.exception.ResourceNotFoundException;
+import ir.maktab.hsps.util.Utility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,8 @@ class AdminServiceTest {
 
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private Utility utility;
 
     @Test
     void test_save_isOk() {

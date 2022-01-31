@@ -1,9 +1,9 @@
 package ir.maktab.hsps.service;
 
-import ir.maktab.hsps.security.auth.ApplicationUser;
-import ir.maktab.hsps.security.auth.ApplicationUserDao;
 import ir.maktab.hsps.entity.user.User;
 import ir.maktab.hsps.repository.UserRepository;
+import ir.maktab.hsps.security.auth.ApplicationUser;
+import ir.maktab.hsps.security.auth.ApplicationUserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +30,4 @@ public class UserService implements ApplicationUserDao {
         );
         return Optional.of(applicationUser);
     }
-
 }

@@ -1,10 +1,12 @@
 package ir.maktab.hsps.service;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
 import ir.maktab.hsps.api.user.customer.*;
 import ir.maktab.hsps.entity.ConfirmationToken;
 import ir.maktab.hsps.entity.user.Customer;
+import ir.maktab.hsps.entity.user.Proficient;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.exception.EmailException;
 import ir.maktab.hsps.exception.PasswordException;
@@ -12,14 +14,16 @@ import ir.maktab.hsps.repository.CustomerRepository;
 import ir.maktab.hsps.security.email.EmailSender;
 import ir.maktab.hsps.util.Utility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import static ir.maktab.hsps.security.ApplicationUserRole.CUSTOMER;
 
@@ -32,6 +36,9 @@ public class CustomerService {
     private final EmailValidatorService emailValidatorService;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public CustomerCreateResult saveCustomer(CustomerCreateParam createParam) {
 
@@ -184,5 +191,9 @@ public class CustomerService {
         Customer user = customerRepository.findByEmail(email);
         user.setEnabled(true);
         customerRepository.save(user);
+    }
+
+    public Iterable<Customer> findAll(BooleanExpression exp) {
+        return customerRepository.findAll(exp);
     }
 }
