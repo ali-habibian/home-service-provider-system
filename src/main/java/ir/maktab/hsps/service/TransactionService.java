@@ -69,11 +69,17 @@ public class TransactionService {
         return getTransactionCreateResult(createParam, customer, homeServiceOrder, homeServiceOffer);
     }
 
-    private TransactionCreateResult getTransactionCreateResult(TransactionCreateParam createParam, Customer customer, HomeServiceOrder homeServiceOrder, HomeServiceOffer homeServiceOffer) {
+    private TransactionCreateResult getTransactionCreateResult(
+            TransactionCreateParam createParam,
+            Customer customer,
+            HomeServiceOrder homeServiceOrder,
+            HomeServiceOffer homeServiceOffer) {
+
         Proficient proficient = homeServiceOffer.getProficient();
 
         DecimalFormat df = new DecimalFormat("0.00");
-        proficient.setCredit(Double.parseDouble(df.format((proficient.getCredit() + (homeServiceOffer.getSuggestedPrice() * 0.7)))));
+        proficient.setCredit(Double.parseDouble(
+                df.format((proficient.getCredit() + (createParam.getAmount() * 0.7)))));
 
         homeServiceOrder.setOrderStatus(OrderStatus.PAID);
 

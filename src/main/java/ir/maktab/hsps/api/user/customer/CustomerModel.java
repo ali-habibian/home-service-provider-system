@@ -1,8 +1,6 @@
 package ir.maktab.hsps.api.user.customer;
 
-import ir.maktab.hsps.api.address.AddressModel;
 import ir.maktab.hsps.entity.user.Customer;
-import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.security.ApplicationUserRole;
 import lombok.AllArgsConstructor;

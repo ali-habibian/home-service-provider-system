@@ -10,6 +10,7 @@ import ir.maktab.hsps.service.MainCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +22,14 @@ public class MainCategoryController {
     private final MainCategoryService mainCategoryService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<CategoryCreateResult> createMainCategory(@RequestBody MainCategoryCreateParam createParam) {
         CategoryCreateResult categoryCreateResult = mainCategoryService.saveMainCategory(createParam);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryCreateResult);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<CategoryUpdateResult> updateMainCategory(@RequestBody MainCategoryUpdateParam updateParam, @PathVariable Long id) {
         updateParam.setId(id);
         CategoryUpdateResult categoryUpdateResult = mainCategoryService.updateMainCategory(updateParam);
@@ -34,6 +37,7 @@ public class MainCategoryController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('main_category:read')")
     public ResponseEntity<MainCategoryListResult> loadAll() {
         MainCategoryListResult mainCategoryListResult = mainCategoryService.loadAll();
         return ResponseEntity.ok(mainCategoryListResult);
@@ -41,6 +45,7 @@ public class MainCategoryController {
 
     @Transactional(readOnly = true)
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('main_category:read')")
     public ResponseEntity<MainCategoryModel> loadById(@PathVariable Long id) {
         MainCategoryModel mainCategoryModel = mainCategoryService.loadByIdReturnModel(id);
         return ResponseEntity.ok(mainCategoryModel);

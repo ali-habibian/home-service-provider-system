@@ -10,7 +10,11 @@ public enum ApplicationUserPermission {
     ORDER_READ("order:read"),
     ORDER_WRITE("order:write"),
     REVIEW_READ("review:read"),
-    REVIEW_WRITE("review:write");
+    REVIEW_WRITE("review:write"),
+    MAIN_CATEGORY_READ("main_category:read"),
+    MAIN_CATEGORY_WRITE("main_category:write"),
+    SUB_CATEGORY_READ("sub_category:read"),
+    SUB_CATEGORY_WRITE("sub_category:write");
 
     private final String permission;
 

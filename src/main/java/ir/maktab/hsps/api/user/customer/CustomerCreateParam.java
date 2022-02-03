@@ -1,9 +1,6 @@
 package ir.maktab.hsps.api.user.customer;
 
-import ir.maktab.hsps.api.address.AddressCreateParam;
 import ir.maktab.hsps.entity.user.Customer;
-import ir.maktab.hsps.entity.user.UserRole;
-import ir.maktab.hsps.security.ApplicationUserRole;
 import lombok.*;
 
 @Data

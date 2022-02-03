@@ -18,6 +18,10 @@ public class TransactionCreateParam {
     private long customerId;
     private long orderId;
     private String customerCreditCardNumber;
+    private String cvv2;
+    private String expressionDate;
+    private Double amount;
+    private String captchaResponse;
 
     public Transaction convert2Transaction(Customer customer, Proficient proficient, HomeServiceOrder homeServiceOrder, HomeServiceOffer homeServiceOffer) {
         return Transaction.builder()

@@ -1,7 +1,6 @@
 package ir.maktab.hsps.api.user.proficient;
 
 import ir.maktab.hsps.entity.user.Proficient;
-import ir.maktab.hsps.entity.user.UserRole;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.security.ApplicationUserRole;
 import lombok.AllArgsConstructor;

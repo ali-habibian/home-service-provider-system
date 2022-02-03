@@ -36,7 +36,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/customers", "/proficients").permitAll()
+                .antMatchers(HttpMethod.POST, "/customers", "/proficients","/transactions/online").permitAll()
                 .antMatchers(HttpMethod.GET, "/customers/confirm", "/proficients/confirm").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -47,7 +47,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**");
+        web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**","/pay_form.html/**");
     }
 
     @Override
