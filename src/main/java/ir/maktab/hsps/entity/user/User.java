@@ -36,7 +36,7 @@ public class User {
     private ApplicationUserRole applicationUserRole;
 
     @Builder.Default
-    private Boolean locked = false;
+    private Boolean locked = true;
 
     @Builder.Default
     private Boolean enabled = false;

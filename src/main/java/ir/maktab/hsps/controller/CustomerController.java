@@ -45,12 +45,6 @@ public class CustomerController {
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public ResponseEntity<CustomerUpdateResult> update(@PathVariable long id, @RequestBody CustomerUpdateParam updateParam) {
 
-//        CustomerModel customerModel = customerService.loadByIdReturnModel(id);
-//        Long addressId = customerModel.getAddressModel().getId();
-//        AddressUpdateParam address = updateParam.getAddress();
-//        address.setId(addressId);
-//        updateParam.setAddress(address);
-
         updateParam.setId(id);
 
         CustomerUpdateResult customerUpdateResult = customerService.update(updateParam);
@@ -59,12 +53,19 @@ public class CustomerController {
 
     //    http://localhost:8080/customers/confirm?token=3ceaa13f-c507-4c78-9c9c-e37822689caa
     @GetMapping(path = {"confirm"})
-    public String confirm(@RequestParam("token") String token) {
+    public String confirmToken(@RequestParam("token") String token) {
         return customerService.confirmToken(token);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("{customerId}/confirm")
+    public ResponseEntity<CustomerUpdateResult> confirmCustomerByAdmin(@PathVariable long customerId) {
+        CustomerUpdateResult customerUpdateResult = customerService.confirmCustomerByAdmin(customerId);
+        return ResponseEntity.ok(customerUpdateResult);
+    }
+
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Iterable<Customer> findAllByQuerydsl(@RequestParam(value = "search") String search) {
         System.out.println("search = " + search);
         CustomerPredicatesBuilder builder = new CustomerPredicatesBuilder();

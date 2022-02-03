@@ -1,14 +1,19 @@
 package ir.maktab.hsps.entity.user;
 
-import ir.maktab.hsps.entity.Address;
+import ir.maktab.hsps.entity.Review;
 import ir.maktab.hsps.entity.Transaction;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
-import ir.maktab.hsps.entity.Review;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,9 +32,6 @@ public class Customer extends User {
 
     @Column(nullable = false)
     private Double credit = 0.0;
-
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private Address address;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<HomeServiceOrder> homeServiceOrders;

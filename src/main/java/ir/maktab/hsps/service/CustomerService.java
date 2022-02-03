@@ -6,7 +6,7 @@ import ir.maktab.hsps.api.user.UserChangePasswordResult;
 import ir.maktab.hsps.api.user.customer.*;
 import ir.maktab.hsps.entity.ConfirmationToken;
 import ir.maktab.hsps.entity.user.Customer;
-import ir.maktab.hsps.entity.user.Proficient;
+import ir.maktab.hsps.entity.user.User;
 import ir.maktab.hsps.entity.user.UserStatus;
 import ir.maktab.hsps.exception.EmailException;
 import ir.maktab.hsps.exception.PasswordException;
@@ -14,13 +14,11 @@ import ir.maktab.hsps.repository.CustomerRepository;
 import ir.maktab.hsps.security.email.EmailSender;
 import ir.maktab.hsps.util.Utility;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -36,9 +34,6 @@ public class CustomerService {
     private final EmailValidatorService emailValidatorService;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     public CustomerCreateResult saveCustomer(CustomerCreateParam createParam) {
 
@@ -190,7 +185,16 @@ public class CustomerService {
     private void enableUser(String email) {
         Customer user = customerRepository.findByEmail(email);
         user.setEnabled(true);
+        user.setCustomerStatus(UserStatus.AWAITING_APPROVAL);
         customerRepository.save(user);
+    }
+
+    public CustomerUpdateResult confirmCustomerByAdmin(long userId) {
+        Customer customer = customerRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("user not found"));
+        customer.setCustomerStatus(UserStatus.CONFIRMED);
+        customer.setLocked(false);
+        Customer updateResult = customerRepository.save(customer);
+        return new CustomerUpdateResult(updateResult.getId(), true);
     }
 
     public Iterable<Customer> findAll(BooleanExpression exp) {

@@ -3,6 +3,7 @@ package ir.maktab.hsps.controller;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
+import ir.maktab.hsps.api.user.customer.CustomerUpdateResult;
 import ir.maktab.hsps.api.user.proficient.ProficientCreateParam;
 import ir.maktab.hsps.api.user.proficient.ProficientModel;
 import ir.maktab.hsps.api.user.proficient.ProficientUpdateParam;
@@ -58,10 +59,16 @@ public class ProficientController {
 
     //    http://localhost:8080/proficients/confirm?token=3ceaa13f-c507-4c78-9c9c-e37822689caa
     @GetMapping(path = {"confirm"})
-    public String confirm(@RequestParam("token") String token) {
+    public String confirmToken(@RequestParam("token") String token) {
         return proficientService.confirmToken(token);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("{proficientId}/confirm")
+    public ResponseEntity<ProficientUpdateResult> confirmProficientByAdmin(@PathVariable long proficientId) {
+        ProficientUpdateResult proficientUpdateResult = proficientService.confirmProficientByAdmin(proficientId);
+        return ResponseEntity.ok(proficientUpdateResult);
+    }
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_PROFICIENT')")

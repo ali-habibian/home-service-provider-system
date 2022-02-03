@@ -25,12 +25,12 @@ class AdminServiceTest {
     @Test
     void test_save_isOk() {
         Admin admin = new Admin();
-        admin.setFirstName("First-5");
-        admin.setLastName("Last-5");
-        admin.setEmail("Email-5@mail.com");
+        admin.setFirstName("First_Admin");
+        admin.setLastName("Last_Admin");
+        admin.setEmail("Email_Admin@mail.com");
         admin.setPassword("123asd45");
 
-        Admin result = adminService.save(admin);
+        Admin result = adminService.saveAdmin(admin);
         assertNotNull(result);
     }
 

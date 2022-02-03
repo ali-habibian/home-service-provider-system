@@ -3,6 +3,7 @@ package ir.maktab.hsps.service;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import ir.maktab.hsps.api.user.UserChangePasswordParam;
 import ir.maktab.hsps.api.user.UserChangePasswordResult;
+import ir.maktab.hsps.api.user.customer.CustomerUpdateResult;
 import ir.maktab.hsps.api.user.proficient.*;
 import ir.maktab.hsps.entity.ConfirmationToken;
 import ir.maktab.hsps.entity.user.Customer;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -203,7 +205,16 @@ public class ProficientService {
     private void enableUser(String email) {
         Proficient user = proficientRepository.findByEmail(email);
         user.setEnabled(true);
+        user.setProficientStatus(UserStatus.AWAITING_APPROVAL);
         proficientRepository.save(user);
+    }
+
+    public ProficientUpdateResult confirmProficientByAdmin(long userId) {
+        Proficient proficient = proficientRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("user not found"));
+        proficient.setProficientStatus(UserStatus.CONFIRMED);
+        proficient.setLocked(false);
+        Proficient updateResult = proficientRepository.save(proficient);
+        return new ProficientUpdateResult(updateResult.getId(), true);
     }
 
     public Iterable<Proficient> findAll(BooleanExpression exp) {

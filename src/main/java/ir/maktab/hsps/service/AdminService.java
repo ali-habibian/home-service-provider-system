@@ -6,24 +6,29 @@ import ir.maktab.hsps.exception.PasswordException;
 import ir.maktab.hsps.repository.AdminRepository;
 import ir.maktab.hsps.util.Utility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
 
+import static ir.maktab.hsps.security.ApplicationUserRole.ADMIN;
+import static ir.maktab.hsps.security.ApplicationUserRole.CUSTOMER;
+
 @Service
 @RequiredArgsConstructor
 public class AdminService extends BaseService<Admin, Long> {
     private final AdminRepository adminRepository;
     private final Utility utility;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @PostConstruct
     public void init() {
         setJpaRepository(adminRepository);
     }
 
-    @Override
-    public Admin save(Admin admin) {
+    public Admin saveAdmin(Admin admin) {
         Admin loadByEmail = loadByEmail(admin.getEmail());
         if (loadByEmail != null) {
             throw new EmailException("Another admin with this email already exists");
@@ -32,6 +37,12 @@ public class AdminService extends BaseService<Admin, Long> {
         if (utility.passwordIsNotValid(admin.getPassword())) {
             throw new PasswordException("Password length must be at least 8 character and contain letters and numbers");
         }
+
+        admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
+        admin.setApplicationUserRole(ADMIN);
+        admin.setLocked(false);
+        admin.setEnabled(true);
+
         return super.save(admin);
     }
 
