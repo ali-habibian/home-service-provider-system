@@ -1,9 +1,13 @@
 package ir.maktab.hsps.controller;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import ir.maktab.hsps.api.offer.HomeServiceOfferCreateParam;
 import ir.maktab.hsps.api.offer.HomeServiceOfferCreateResult;
 import ir.maktab.hsps.api.offer.HomeServiceOfferModel;
-import ir.maktab.hsps.api.order.HomeServiceOrderModel;
+import ir.maktab.hsps.entity.HomeServiceOffer;
+import ir.maktab.hsps.entity.user.Customer;
+import ir.maktab.hsps.querydsl.customer.CustomerPredicatesBuilder;
+import ir.maktab.hsps.querydsl.offer.OfferPredicatesBuilder;
 import ir.maktab.hsps.service.HomeServiceOfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +47,22 @@ public class HomeServiceOfferController {
     public ResponseEntity<List<HomeServiceOfferModel>> getAllByProficientId(@RequestParam long proficientId) {
         List<HomeServiceOfferModel> result = offerService.loadByProficientId(proficientId);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('offer:read')")
+    public Iterable<HomeServiceOfferModel> findAllByQuerydsl(@RequestParam(value = "search") String search) {
+        System.out.println("search = " + search);
+        OfferPredicatesBuilder builder = new OfferPredicatesBuilder();
+        if (search != null) {
+            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+            Matcher matcher = pattern.matcher(search + ",");
+            while (matcher.find()) {
+                builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+            }
+        }
+        BooleanExpression exp = builder.build();
+        return offerService.findAll(exp);
     }
 
 }

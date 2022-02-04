@@ -1,12 +1,15 @@
 package ir.maktab.hsps.service;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import ir.maktab.hsps.api.offer.HomeServiceOfferCreateParam;
 import ir.maktab.hsps.api.offer.HomeServiceOfferCreateResult;
 import ir.maktab.hsps.api.offer.HomeServiceOfferModel;
+import ir.maktab.hsps.api.order.HomeServiceOrderModel;
 import ir.maktab.hsps.entity.HomeServiceOffer;
 import ir.maktab.hsps.entity.category.SubCategory;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
 import ir.maktab.hsps.entity.order.OrderStatus;
+import ir.maktab.hsps.entity.user.Customer;
 import ir.maktab.hsps.entity.user.Proficient;
 import ir.maktab.hsps.exception.HomeServiceOfferException;
 import ir.maktab.hsps.repository.HomeServiceOfferRepository;
@@ -79,5 +82,13 @@ public class HomeServiceOfferService extends BaseService<HomeServiceOffer, Long>
         List<HomeServiceOfferModel> homeServiceOfferModels = new ArrayList<>();
         homeServiceOffers.forEach(o -> homeServiceOfferModels.add(new HomeServiceOfferModel().convertOffer2Model(o)));
         return homeServiceOfferModels;
+    }
+
+    public Iterable<HomeServiceOfferModel> findAll(BooleanExpression exp) {
+        List<HomeServiceOfferModel> offerModels = new ArrayList<>();
+        homeServiceOfferRepository.findAll(exp).forEach(
+                o -> offerModels.add(new HomeServiceOfferModel().convertOffer2Model(o))
+        );
+        return offerModels;
     }
 }

@@ -1,5 +1,6 @@
 package ir.maktab.hsps.service;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import ir.maktab.hsps.api.order.*;
 import ir.maktab.hsps.entity.category.SubCategory;
 import ir.maktab.hsps.entity.order.HomeServiceOrder;
@@ -73,6 +74,14 @@ public class HomeServiceOrderService {
         List<HomeServiceOrder> orders = homeServiceOrderRepository.findAllByCustomer_Id(customerId);
         List<HomeServiceOrderModel> orderModels = new ArrayList<>();
         orders.forEach(o -> orderModels.add(new HomeServiceOrderModel().convertOrder2Model(o)));
+        return orderModels;
+    }
+
+    public Iterable<HomeServiceOrderModel> findAll(BooleanExpression exp) {
+        List<HomeServiceOrderModel> orderModels = new ArrayList<>();
+        homeServiceOrderRepository.findAll(exp).forEach(
+                o -> orderModels.add(new HomeServiceOrderModel().convertOrder2Model(o))
+        );
         return orderModels;
     }
 }
