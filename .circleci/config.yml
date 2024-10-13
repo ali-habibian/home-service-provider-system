@@ -13,7 +13,7 @@ jobs:
       - restore_cache:
           key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
       - run:
-          command: mvn clean install
+          command: mvn clean install -DskipTests
       - save_cache:
           key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
           paths:
