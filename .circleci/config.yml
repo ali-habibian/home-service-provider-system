@@ -30,11 +30,11 @@ jobs:
       # Replace this with steps to deploy to users
       - run:
           name: deploy
-          command: '#e.g. ./deploy.sh'
+          command: 'docker-compose up --build'
 workflows:
   build-and-test:
     jobs:
-      - test-java
-    # - deploy:
-    #     requires:
-    #       - test-java
+      - build-java
+    - deploy:
+        requires:
+          - build-java
