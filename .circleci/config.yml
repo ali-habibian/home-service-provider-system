@@ -1,8 +1,6 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:java:.
 version: 2.1
 jobs:
-  test-java:
+  build-java:
     docker:
       - image: cimg/openjdk:17.0
     steps:
@@ -15,26 +13,24 @@ jobs:
       - restore_cache:
           key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
       - run:
-          command: mvn verify
-      - store_test_results:
-          path: target/surefire-reports
+          command: mvn clean install
       - save_cache:
           key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
           paths:
             - ~/.m2/repository
+
   deploy:
-    # This is an example deploy job, not actually used by the workflow
     docker:
       - image: cimg/base:stable
     steps:
-      # Replace this with steps to deploy to users
       - run:
           name: deploy
           command: 'docker-compose up --build'
+
 workflows:
-  build-and-test:
+  build-and-deploy:
     jobs:
       - build-java
-    - deploy:
-        requires:
-          - build-java
+      - deploy:
+          requires:
+            - build-java
